@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Volunteer Registration | Help Me Help You NGO</title>
+    <style>
+      :root {
+        --bg: #f6eee7;
+        --panel: rgba(255, 255, 255, 0.92);
+        --panel-soft: #fcf7f3;
+        --border: #ead8cc;
+        --accent: #7a1418;
+        --accent-soft: #fff0ec;
+        --text: #241815;
+        --muted: #735c51;
+        --success-bg: #edf8ef;
+        --success: #286a3c;
+        --error-bg: #fff1f1;
+        --error: #a12628;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background:
+          radial-gradient(circle at top left, rgba(217, 140, 111, 0.22), transparent 28%),
+          linear-gradient(180deg, #f8f1ea 0%, #f4ebe4 45%, #f8f4f0 100%);
+        color: var(--text);
+      }
+
+      .page {
+        max-width: 1260px;
+        margin: 0 auto;
+        padding: 28px 18px 56px;
+      }
+
+      .hero {
+        background: linear-gradient(135deg, #6b171b 0%, #8d2e32 52%, #d28e74 100%);
+        color: #fff;
+        border-radius: 32px;
+        padding: 32px;
+        box-shadow: 0 24px 70px rgba(91, 25, 26, 0.22);
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 20px;
+      }
+
+      .eyebrow {
+        font-size: 12px;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        opacity: 0.7;
+        margin: 0;
+      }
+
+      h1 {
+        margin: 14px 0 0;
+        font-size: clamp(2rem, 4vw, 3.6rem);
+        line-height: 1.06;
+      }
+
+      .hero p.description {
+        max-width: 720px;
+        color: rgba(255, 255, 255, 0.82);
+        line-height: 1.7;
+        margin-top: 14px;
+      }
+
+      .stat-grid {
+        display: grid;
+        gap: 12px;
+      }
+
+      .stat-card {
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 22px;
+        padding: 16px;
+        backdrop-filter: blur(8px);
+      }
+
+      .stat-card strong {
+        display: block;
+        margin-top: 10px;
+        font-size: 1.8rem;
+      }
+
+      .content {
+        margin-top: 24px;
+        display: grid;
+        gap: 22px;
+      }
+
+      .section {
+        border: 1px solid var(--border);
+        border-radius: 28px;
+        background: var(--panel);
+        padding: 24px;
+        box-shadow: 0 18px 45px rgba(94, 52, 33, 0.08);
+      }
+
+      .section h2 {
+        margin: 0;
+        font-size: 1.35rem;
+      }
+
+      .section p.section-copy {
+        margin: 8px 0 0;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      .grid {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin-top: 18px;
+      }
+
+      .grid-three {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      label.field {
+        display: block;
+      }
+
+      label.field span {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 11px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #8e6c5f;
+        font-weight: 700;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        background: #fff;
+        padding: 13px 14px;
+        font: inherit;
+        color: var(--text);
+        outline: none;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 4px rgba(122, 20, 24, 0.08);
+      }
+
+      textarea {
+        min-height: 110px;
+        resize: vertical;
+      }
+
+      .full {
+        grid-column: 1 / -1;
+      }
+
+      .option-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .chip {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px;
+        border-radius: 18px;
+        background: #fff;
+        border: 1px solid var(--border);
+        color: #5f493f;
+      }
+
+      .chip input {
+        width: auto;
+        box-shadow: none;
+      }
+
+      .consent-list {
+        display: grid;
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .consent-item {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        border: 1px solid var(--border);
+        background: var(--panel-soft);
+        border-radius: 18px;
+        padding: 14px;
+        color: #5b463d;
+      }
+
+      .consent-item input {
+        width: auto;
+        margin-top: 2px;
+      }
+
+      .feedback {
+        display: none;
+        border-radius: 18px;
+        padding: 16px 18px;
+        font-weight: 600;
+      }
+
+      .feedback.success {
+        display: block;
+        background: var(--success-bg);
+        color: var(--success);
+      }
+
+      .feedback.error {
+        display: block;
+        background: var(--error-bg);
+        color: var(--error);
+      }
+
+      .trap {
+        position: absolute;
+        left: -9999px;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+      }
+
+      .actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      button {
+        border: 0;
+        border-radius: 999px;
+        padding: 13px 20px;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      button[type="reset"] {
+        border: 1px solid var(--border);
+        background: #fff;
+        color: #5e483f;
+      }
+
+      button[type="submit"] {
+        background: var(--accent);
+        color: #fff;
+      }
+
+      .muted-box {
+        border: 1px dashed var(--border);
+        border-radius: 18px;
+        padding: 14px;
+        background: var(--panel-soft);
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      @media (max-width: 960px) {
+        .hero-grid,
+        .grid,
+        .grid-three,
+        .option-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .page {
+          padding: 18px 14px 42px;
+        }
+
+        .hero,
+        .section {
+          padding: 20px;
+          border-radius: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero">
+        <div class="hero-grid">
+          <div>
+            <p class="eyebrow">Public Volunteer Form</p>
+            <h1>Join Our NGO Volunteer Network</h1>
+            <p class="description">
+              Fill this registration form to volunteer with our campaigns,
+              outreach drives, healthcare events, community work, and support
+              programs. Your submission goes directly to the NGO volunteer desk
+              for review.
+            </p>
+          </div>
+          <div class="stat-grid">
+            <div class="stat-card">
+              <small>Access</small>
+              <strong>Public</strong>
+              <div>No login required</div>
+            </div>
+            <div class="stat-card">
+              <small>Review flow</small>
+              <strong>Admin Approval</strong>
+              <div>Registrations are screened before assignment</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="content">
+        <div id="feedback" class="feedback" aria-live="polite"></div>
+
+        <form id="volunteerForm" enctype="multipart/form-data">
+          <div class="trap" aria-hidden="true">
+            <label>
+              Website
+              <input type="text" name="website" tabindex="-1" autocomplete="off" />
+            </label>
+          </div>
+          <section class="section">
+            <h2>Basic Personal Information</h2>
+            <p class="section-copy">
+              Tell us who you are and how we can contact you.
+            </p>
+            <div class="grid">
+              <label class="field">
+                <span>Full Name</span>
+                <input name="fullName" required />
+              </label>
+              <label class="field">
+                <span>Date of Birth</span>
+                <input type="date" name="dateOfBirth" />
+              </label>
+              <label class="field">
+                <span>Gender</span>
+                <select name="gender">
+                  <option value="">Select gender</option>
+                  <option>Female</option>
+                  <option>Male</option>
+                  <option>Non-binary</option>
+                  <option>Prefer not to say</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>Phone Number</span>
+                <input name="phoneNumber" inputmode="numeric" pattern="(?:\\+?91[- ]?)?[0-9]{10}" required />
+              </label>
+              <label class="field">
+                <span>Email Address</span>
+                <input type="email" name="emailAddress" />
+              </label>
+              <label class="field">
+                <span>Emergency Contact Name</span>
+                <input name="emergencyContactName" />
+              </label>
+              <label class="field">
+                <span>Emergency Contact Phone</span>
+                <input name="emergencyContactPhone" inputmode="numeric" pattern="(?:\\+?91[- ]?)?[0-9]{10}" />
+              </label>
+            </div>
+          </section>
+
+          <section class="section">
+            <h2>Address Information</h2>
+            <p class="section-copy">Share your current address details.</p>
+            <div class="grid">
+              <label class="field"><span>House / Flat Number</span><input name="houseFlatNumber" /></label>
+              <label class="field"><span>Street / Area / Locality</span><input name="streetAreaLocality" /></label>
+              <label class="field"><span>Landmark (Optional)</span><input name="landmark" /></label>
+              <label class="field"><span>Village / Town / City</span><input name="villageTownCity" /></label>
+              <label class="field"><span>District</span><input name="district" /></label>
+              <label class="field"><span>State</span><input name="state" /></label>
+              <label class="field"><span>PIN Code</span><input name="pinCode" inputmode="numeric" pattern="[0-9]{6}" /></label>
+              <label class="field"><span>Country</span><input name="country" value="India" /></label>
+            </div>
+          </section>
+
+          <section class="section">
+            <h2>Identity Details</h2>
+            <p class="section-copy">Optional identity details for internal verification.</p>
+            <div class="grid">
+              <label class="field">
+                <span>ID Type</span>
+                <select name="idType">
+                  <option value="">Select ID type</option>
+                  <option>Aadhaar</option>
+                  <option>Passport</option>
+                  <option>Driving License</option>
+                  <option>College ID</option>
+                </select>
+              </label>
+              <label class="field"><span>ID Number</span><input name="idNumber" /></label>
+            </div>
+          </section>
+
+          <section class="section">
+            <h2>Education / Background</h2>
+            <p class="section-copy">Help us understand your background and current situation.</p>
+            <div class="grid">
+              <label class="field">
+                <span>Highest Education Level</span>
+                <select name="highestEducationLevel">
+                  <option value="">Select education level</option>
+                  <option>School</option>
+                  <option>12th Pass</option>
+                  <option>Diploma</option>
+                  <option>Graduate</option>
+                  <option>Postgraduate</option>
+                  <option>Doctorate</option>
+                  <option>Other</option>
+                </select>
+              </label>
+              <label class="field"><span>Field of Study</span><input name="fieldOfStudy" /></label>
+              <label class="field full"><span>College / School Name</span><input name="collegeSchoolName" /></label>
+              <label class="field full">
+                <span>Current Occupation</span>
+                <select name="currentOccupation">
+                  <option value="">Select occupation</option>
+                  <option>Student</option>
+                  <option>Working</option>
+                  <option>Self-employed</option>
+                  <option>Other</option>
+                </select>
+              </label>
+            </div>
+          </section>
+
+          <section class="section">
+            <h2>Volunteer Preferences</h2>
+            <p class="section-copy">Select the kinds of work you want to support.</p>
+            <div class="option-grid">
+              <label class="chip"><input type="checkbox" name="areasOfInterest" value="Teaching" />Teaching</label>
+              <label class="chip"><input type="checkbox" name="areasOfInterest" value="Environment" />Environment</label>
+              <label class="chip"><input type="checkbox" name="areasOfInterest" value="Healthcare" />Healthcare</label>
+              <label class="chip"><input type="checkbox" name="areasOfInterest" value="Event Management" />Event Management</label>
+              <label class="chip"><input type="checkbox" name="areasOfInterest" value="Fundraising" />Fundraising</label>
+              <label class="chip"><input type="checkbox" name="areasOfInterest" value="Social Media" />Social Media</label>
+              <label class="chip"><input type="checkbox" name="areasOfInterest" value="Community Work" />Community Work</label>
+            </div>
+            <div class="grid">
+              <label class="field"><span>Skills</span><textarea name="skills"></textarea></label>
+              <label class="field"><span>Languages Known</span><textarea name="languagesKnown"></textarea></label>
+            </div>
+          </section>
+
+          <section class="section">
+            <h2>Availability</h2>
+            <p class="section-copy">Tell us when and how you can contribute.</p>
+            <div class="option-grid">
+              <label class="chip"><input type="checkbox" name="availableDays" value="Mon" />Mon</label>
+              <label class="chip"><input type="checkbox" name="availableDays" value="Tue" />Tue</label>
+              <label class="chip"><input type="checkbox" name="availableDays" value="Wed" />Wed</label>
+              <label class="chip"><input type="checkbox" name="availableDays" value="Thu" />Thu</label>
+              <label class="chip"><input type="checkbox" name="availableDays" value="Fri" />Fri</label>
+              <label class="chip"><input type="checkbox" name="availableDays" value="Sat" />Sat</label>
+              <label class="chip"><input type="checkbox" name="availableDays" value="Sun" />Sun</label>
+            </div>
+            <div class="grid grid-three">
+              <label class="field"><span>Available Time</span><input name="availableTime" /></label>
+              <label class="field"><span>Hours per Week</span><input name="hoursPerWeek" inputmode="numeric" min="1" max="80" /></label>
+              <label class="field">
+                <span>Preferred Mode</span>
+                <select name="preferredMode">
+                  <option value="">Select mode</option>
+                  <option>Online</option>
+                  <option>On-site</option>
+                  <option>Both</option>
+                </select>
+              </label>
+            </div>
+          </section>
+
+          <section class="section">
+            <h2>Experience</h2>
+            <p class="section-copy">Previous volunteer work is optional but useful.</p>
+            <div class="grid">
+              <label class="field">
+                <span>Previous Volunteer Experience</span>
+                <select name="previousVolunteerExperience">
+                  <option value="No">No</option>
+                  <option value="Yes">Yes</option>
+                </select>
+              </label>
+              <label class="field"><span>Organization Name</span><input name="previousOrganizationName" /></label>
+              <label class="field full"><span>Description of Work</span><textarea name="previousWorkDescription"></textarea></label>
+            </div>
+          </section>
+
+          <section class="section">
+            <h2>Additional Information</h2>
+            <p class="section-copy">Share your motivation and any special context we should know.</p>
+            <div class="grid">
+              <label class="field full"><span>Why do you want to volunteer?</span><textarea name="motivation"></textarea></label>
+              <label class="field"><span>Special Skills or Certifications</span><input name="specialSkillsOrCertifications" /></label>
+              <label class="field"><span>Medical Conditions (Optional)</span><input name="medicalConditions" /></label>
+            </div>
+          </section>
+
+          <section class="section">
+            <h2>Consent and Agreement</h2>
+            <p class="section-copy">Required agreements must be accepted before submission.</p>
+            <div class="consent-list">
+              <label class="consent-item"><input type="checkbox" name="consentTerms" required />I accept the volunteer registration terms and conditions.</label>
+              <label class="consent-item"><input type="checkbox" name="consentPhotos" />I permit the NGO to use photos or videos featuring me during events.</label>
+              <label class="consent-item"><input type="checkbox" name="consentPolicies" required />I agree to follow NGO policies and code of conduct.</label>
+            </div>
+          </section>
+
+          <div class="actions">
+            <button type="reset">Reset form</button>
+            <button type="submit" id="submitButton">Submit registration</button>
+          </div>
+        </form>
+      </main>
+    </div>
+
+    <script>
+      const form = document.getElementById("volunteerForm");
+      const feedback = document.getElementById("feedback");
+      const submitButton = document.getElementById("submitButton");
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        feedback.className = "feedback";
+        feedback.textContent = "";
+        submitButton.disabled = true;
+        submitButton.textContent = "Submitting...";
+
+        try {
+          const response = await fetch("/api/public/volunteers", {
+            method: "POST",
+            body: new FormData(form),
+          });
+
+          const result = await response.json();
+
+          if (!response.ok) {
+            feedback.className = "feedback error";
+            feedback.textContent = result.error || "Unable to submit registration.";
+            return;
+          }
+
+          feedback.className = "feedback success";
+          feedback.textContent =
+            result.success || "Your volunteer registration has been submitted.";
+          form.reset();
+        } catch (error) {
+          feedback.className = "feedback error";
+          feedback.textContent = "Network error. Please try again.";
+        } finally {
+          submitButton.disabled = false;
+          submitButton.textContent = "Submit registration";
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      });
+    </script>
+  </body>
+</html>
