@@ -143,6 +143,22 @@
         font-weight: 700;
       }
 
+      .required-indicator {
+        color: #c62828;
+      }
+
+      label.field:has(input[required]) span::after,
+      label.field:has(select[required]) span::after,
+      label.field:has(textarea[required]) span::after {
+        content: " *";
+        color: #c62828;
+      }
+
+      label.consent-item:has(input[required]) span::after {
+        content: " *";
+        color: #c62828;
+      }
+
       input,
       select,
       textarea {
@@ -384,16 +400,15 @@
 
           <section class="section">
             <h2>Address Information</h2>
-            <p class="section-copy">Share your current address details.</p>
+            <p class="section-copy">Share your current address in one line.</p>
             <div class="grid">
-              <label class="field"><span>House / Flat Number</span><input name="houseFlatNumber" /></label>
-              <label class="field"><span>Street / Area / Locality</span><input name="streetAreaLocality" /></label>
-              <label class="field"><span>Landmark (Optional)</span><input name="landmark" /></label>
-              <label class="field"><span>Village / Town / City</span><input name="villageTownCity" /></label>
-              <label class="field"><span>District</span><input name="district" /></label>
-              <label class="field"><span>State</span><input name="state" /></label>
-              <label class="field"><span>PIN Code</span><input name="pinCode" inputmode="numeric" pattern="[0-9]{6}" /></label>
-              <label class="field"><span>Country</span><input name="country" value="India" /></label>
+              <label class="field full">
+                <span>Full Address</span>
+                <input
+                  name="fullAddress"
+                  placeholder="House / Flat, Street, Area, City, District, State, PIN, Country"
+                />
+              </label>
             </div>
           </section>
 
@@ -450,6 +465,7 @@
           <section class="section">
             <h2>Volunteer Preferences</h2>
             <p class="section-copy">Select the kinds of work you want to support.</p>
+            <p class="section-copy">Areas of Interest <span class="required-indicator">*</span></p>
             <div class="option-grid">
               <label class="chip"><input type="checkbox" name="areasOfInterest" value="Teaching" />Teaching</label>
               <label class="chip"><input type="checkbox" name="areasOfInterest" value="Environment" />Environment</label>
@@ -468,6 +484,7 @@
           <section class="section">
             <h2>Availability</h2>
             <p class="section-copy">Tell us when and how you can contribute.</p>
+            <p class="section-copy">Available Days <span class="required-indicator">*</span></p>
             <div class="option-grid">
               <label class="chip"><input type="checkbox" name="availableDays" value="Mon" />Mon</label>
               <label class="chip"><input type="checkbox" name="availableDays" value="Tue" />Tue</label>
@@ -522,9 +539,9 @@
             <h2>Consent and Agreement</h2>
             <p class="section-copy">Required agreements must be accepted before submission.</p>
             <div class="consent-list">
-              <label class="consent-item"><input type="checkbox" name="consentTerms" required />I accept the volunteer registration terms and conditions.</label>
-              <label class="consent-item"><input type="checkbox" name="consentPhotos" />I permit the NGO to use photos or videos featuring me during events.</label>
-              <label class="consent-item"><input type="checkbox" name="consentPolicies" required />I agree to follow NGO policies and code of conduct.</label>
+              <label class="consent-item"><input type="checkbox" name="consentTerms" required /><span>I accept the volunteer registration terms and conditions.</span></label>
+              <label class="consent-item"><input type="checkbox" name="consentPhotos" /><span>I permit the NGO to use photos or videos featuring me during events.</span></label>
+              <label class="consent-item"><input type="checkbox" name="consentPolicies" required /><span>I agree to follow NGO policies and code of conduct.</span></label>
             </div>
           </section>
 

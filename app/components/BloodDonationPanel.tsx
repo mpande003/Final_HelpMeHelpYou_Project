@@ -15,6 +15,17 @@ import {
 } from "../dashboard/blood-actions";
 import type { BloodDonor, BloodRequest } from "@/lib/blood";
 import type { AppEvent } from "@/lib/events";
+import {
+  internalHeroSectionClassName,
+  internalLabelClassName,
+  internalMetricCardClassName,
+  internalMutedTextClassName,
+  internalPanelEyebrowClassName,
+  internalFormInputClassName,
+  internalSectionClassName,
+  internalSectionDescriptionClassName,
+  internalSectionTitleClassName,
+} from "./internalTheme";
 
 type BloodDonationPanelProps = {
   events: AppEvent[];
@@ -22,11 +33,9 @@ type BloodDonationPanelProps = {
   requests: BloodRequest[];
 };
 
-const inputClassName =
-  "w-full rounded-2xl border border-[#e9d7cb] bg-white px-4 py-3 text-sm text-[#251916] outline-none transition focus:border-[#8d2925] focus:ring-4 focus:ring-[#8d2925]/10";
+const inputClassName = internalFormInputClassName;
 
-const sectionClassName =
-  "rounded-[1.65rem] border border-[#eadbd0] bg-white/92 p-6 shadow-[0_18px_45px_rgba(94,52,33,0.08)]";
+const sectionClassName = internalSectionClassName;
 
 function SectionHeader({
   title,
@@ -37,8 +46,8 @@ function SectionHeader({
 }) {
   return (
     <div className="mb-5">
-      <h3 className="text-xl font-semibold text-[#241815]">{title}</h3>
-      <p className="mt-1 text-sm leading-6 text-[#71594e]">{description}</p>
+      <h3 className={internalSectionTitleClassName}>{title}</h3>
+      <p className={internalSectionDescriptionClassName}>{description}</p>
     </div>
   );
 }
@@ -122,14 +131,14 @@ export default function BloodDonationPanel({
 
   return (
     <div className="space-y-6">
-      <section className="rounded-[2rem] border border-[#ead7cb] bg-[linear-gradient(135deg,#fffaf7_0%,#fff4ef_58%,#f7e7de_100%)] p-7 shadow-[0_18px_50px_rgba(94,52,33,0.08)]">
-        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#aa725e]">
+      <section className={internalHeroSectionClassName}>
+        <p className={internalPanelEyebrowClassName}>
           Blood donation workflow
         </p>
-        <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#241815]">
+        <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#4b302a]">
           Camp donors, blood bank collaboration, and relative support
         </h2>
-        <p className="mt-2 max-w-4xl text-sm leading-7 text-[#6d554a]">
+        <p className="mt-2 max-w-4xl text-sm leading-7 text-[#7a5a4d]">
           Register donors against blood donation camps, allocate them to partner
           blood banks, then manage emergency blood requests for donor relatives
           through verification and fulfillment.
@@ -166,13 +175,13 @@ export default function BloodDonationPanel({
           ].map((item) => (
             <div
               key={item.label}
-              className="rounded-2xl border border-[#ead8cb] bg-white/82 px-4 py-4 text-sm"
+              className={internalMetricCardClassName}
             >
-              <p className="text-[#88695d]">{item.label}</p>
-              <p className="mt-1 text-2xl font-semibold text-[#251916]">
+              <p className={internalMutedTextClassName}>{item.label}</p>
+              <p className="mt-1 text-2xl font-semibold text-[#4b302a]">
                 {item.value}
               </p>
-              <p className="mt-2 text-xs text-[#7b6358]">{item.note}</p>
+              <p className="mt-2 text-xs text-[#7a5a4d]">{item.note}</p>
             </div>
           ))}
         </div>
@@ -187,7 +196,7 @@ export default function BloodDonationPanel({
           <form action={donorAction} className="space-y-5">
             <div className="grid gap-4 md:grid-cols-2">
               <label className="block">
-                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-[#8f6b5c]">
+                <span className={internalLabelClassName}>
                   Blood Donation Event
                 </span>
                 <select
@@ -205,19 +214,19 @@ export default function BloodDonationPanel({
                 </select>
               </label>
               <label className="block">
-                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-[#8f6b5c]">
+                <span className={internalLabelClassName}>
                   Donor Name
                 </span>
                 <input name="donorName" className={inputClassName} required />
               </label>
               <label className="block">
-                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-[#8f6b5c]">
+                <span className={internalLabelClassName}>
                   Donor Phone
                 </span>
                 <input name="donorPhone" className={inputClassName} required />
               </label>
               <label className="block">
-                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-[#8f6b5c]">
+                <span className={internalLabelClassName}>
                   Blood Group
                 </span>
                 <select name="bloodGroup" className={inputClassName} required defaultValue="">
@@ -232,31 +241,31 @@ export default function BloodDonationPanel({
                 </select>
               </label>
               <label className="block">
-                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-[#8f6b5c]">
+                <span className={internalLabelClassName}>
                   Blood Bank Name
                 </span>
                 <input name="bloodBankName" className={inputClassName} required />
               </label>
               <label className="block">
-                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-[#8f6b5c]">
+                <span className={internalLabelClassName}>
                   Blood Bank Contact
                 </span>
                 <input name="bloodBankContact" className={inputClassName} />
               </label>
               <label className="block">
-                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-[#8f6b5c]">
+                <span className={internalLabelClassName}>
                   Age
                 </span>
                 <input name="age" className={inputClassName} />
               </label>
               <label className="block">
-                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-[#8f6b5c]">
+                <span className={internalLabelClassName}>
                   Gender
                 </span>
                 <input name="gender" className={inputClassName} />
               </label>
               <label className="block">
-                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-[#8f6b5c]">
+                <span className={internalLabelClassName}>
                   Donation Date
                 </span>
                 <input
@@ -269,19 +278,19 @@ export default function BloodDonationPanel({
                 />
               </label>
               <label className="block">
-                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-[#8f6b5c]">
+                <span className={internalLabelClassName}>
                   Units Donated
                 </span>
                 <input name="unitsDonated" className={inputClassName} />
               </label>
               <label className="block md:col-span-2">
-                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-[#8f6b5c]">
+                <span className={internalLabelClassName}>
                   Address
                 </span>
                 <input name="address" className={inputClassName} />
               </label>
               <label className="block">
-                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-[#8f6b5c]">
+                <span className={internalLabelClassName}>
                   Donor ID / Card Number
                 </span>
                 <input name="donorIdNumber" className={inputClassName} />
@@ -296,7 +305,7 @@ export default function BloodDonationPanel({
                 <span>Eligible for donor-relative blood support if needed</span>
               </label>
               <label className="block md:col-span-2">
-                <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-[#8f6b5c]">
+                <span className={internalLabelClassName}>
                   Notes
                 </span>
                 <textarea name="notes" className={`${inputClassName} min-h-24`} />
@@ -483,7 +492,7 @@ export default function BloodDonationPanel({
                         <button
                           type="button"
                           onClick={() => toggleDonorView(donor.id)}
-                          className="rounded-full border border-[#ead8cb] bg-white px-3 py-1.5 text-xs font-semibold text-[#5d463c]"
+                          className="rounded-full border border-[#fec288] bg-white px-3 py-1.5 text-xs font-semibold text-[#7a5a4d] hover:bg-[#fff7cf]"
                         >
                           {selectedDonorId === donor.id ? "Hide" : "View"}
                         </button>
@@ -495,7 +504,7 @@ export default function BloodDonationPanel({
                               selectedDonorId === donor.id ? !current : true,
                             );
                           }}
-                          className="rounded-full bg-[#fff4ef] px-3 py-1.5 text-xs font-semibold text-[#7a1418]"
+                          className="rounded-full bg-[#fff0b8] px-3 py-1.5 text-xs font-semibold text-[#fa5c5c]"
                         >
                           Update
                         </button>

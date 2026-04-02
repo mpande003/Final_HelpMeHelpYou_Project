@@ -10,14 +10,7 @@ export type Volunteer = {
   emailAddress: string | null;
   emergencyContactName: string | null;
   emergencyContactPhone: string | null;
-  houseFlatNumber: string | null;
-  streetAreaLocality: string | null;
-  landmark: string | null;
-  villageTownCity: string | null;
-  district: string | null;
-  state: string | null;
-  pinCode: string | null;
-  country: string;
+  fullAddress: string | null;
   idType: string | null;
   idNumber: string | null;
   highestEducationLevel: string | null;
@@ -60,14 +53,7 @@ type VolunteerRow = {
   email_address: string | null;
   emergency_contact_name: string | null;
   emergency_contact_phone: string | null;
-  house_flat_number: string | null;
-  street_area_locality: string | null;
-  landmark: string | null;
-  village_town_city: string | null;
-  district: string | null;
-  state: string | null;
-  pin_code: string | null;
-  country: string;
+  full_address: string | null;
   id_type: string | null;
   id_number: string | null;
   highest_education_level: string | null;
@@ -122,14 +108,7 @@ function mapVolunteer(row: VolunteerRow): Volunteer {
     emailAddress: row.email_address,
     emergencyContactName: row.emergency_contact_name,
     emergencyContactPhone: row.emergency_contact_phone,
-    houseFlatNumber: row.house_flat_number,
-    streetAreaLocality: row.street_area_locality,
-    landmark: row.landmark,
-    villageTownCity: row.village_town_city,
-    district: row.district,
-    state: row.state,
-    pinCode: row.pin_code,
-    country: row.country,
+    fullAddress: row.full_address,
     idType: row.id_type,
     idNumber: row.id_number,
     highestEducationLevel: row.highest_education_level,
@@ -182,9 +161,8 @@ export function createVolunteer(
       `
         INSERT INTO volunteers (
           full_name, date_of_birth, gender, phone_number, email_address,
-          emergency_contact_name, emergency_contact_phone, house_flat_number,
-          street_area_locality, landmark, village_town_city, district, state,
-          pin_code, country, id_type, id_number,
+          emergency_contact_name, emergency_contact_phone, full_address,
+          id_type, id_number,
           highest_education_level, field_of_study, college_school_name,
           current_occupation, areas_of_interest, skills, languages_known,
           available_days, available_time, hours_per_week, preferred_mode,
@@ -196,9 +174,8 @@ export function createVolunteer(
           consent_terms, consent_photos, consent_policies, created_by
         ) VALUES (
           @fullName, @dateOfBirth, @gender, @phoneNumber, @emailAddress,
-          @emergencyContactName, @emergencyContactPhone, @houseFlatNumber,
-          @streetAreaLocality, @landmark, @villageTownCity, @district, @state,
-          @pinCode, @country, @idType, @idNumber,
+          @emergencyContactName, @emergencyContactPhone, @fullAddress,
+          @idType, @idNumber,
           @highestEducationLevel, @fieldOfStudy, @collegeSchoolName,
           @currentOccupation, @areasOfInterest, @skills, @languagesKnown,
           @availableDays, @availableTime, @hoursPerWeek, @preferredMode,
@@ -237,14 +214,7 @@ export function updateVolunteer(
             email_address = @emailAddress,
             emergency_contact_name = @emergencyContactName,
             emergency_contact_phone = @emergencyContactPhone,
-            house_flat_number = @houseFlatNumber,
-            street_area_locality = @streetAreaLocality,
-            landmark = @landmark,
-            village_town_city = @villageTownCity,
-            district = @district,
-            state = @state,
-            pin_code = @pinCode,
-            country = @country,
+            full_address = @fullAddress,
             id_type = @idType,
             id_number = @idNumber,
             highest_education_level = @highestEducationLevel,
@@ -281,9 +251,8 @@ export function listVolunteers(): Volunteer[] {
       `
         SELECT
           id, full_name, date_of_birth, gender, phone_number, email_address,
-          emergency_contact_name, emergency_contact_phone, house_flat_number,
-          street_area_locality, landmark, village_town_city, district, state,
-          pin_code, country, id_type, id_number,
+          emergency_contact_name, emergency_contact_phone, full_address,
+          id_type, id_number,
           highest_education_level, field_of_study, college_school_name,
           current_occupation, areas_of_interest, skills, languages_known,
           available_days, available_time, hours_per_week, preferred_mode,

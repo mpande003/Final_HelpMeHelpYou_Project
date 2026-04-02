@@ -128,7 +128,7 @@ export default function LoginPage() {
                   htmlFor="username"
                   className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#8a7441]"
                 >
-                  Username
+                  Username <span className="required-indicator">*</span>
                 </label>
                 <input
                   id="username"
@@ -146,7 +146,7 @@ export default function LoginPage() {
                   htmlFor="password"
                   className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#8a7441]"
                 >
-                  Password
+                  Password <span className="required-indicator">*</span>
                 </label>
                 <input
                   id="password"

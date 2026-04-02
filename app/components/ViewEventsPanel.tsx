@@ -84,7 +84,7 @@ export default function ViewEventsPanel({ events }: { events: AppEvent[] }) {
                       {event.startDate} to {event.endDate}
                     </td>
                     <td className="px-3 py-4">
-                      <span className="rounded-full bg-[#fff4e8] px-3 py-1 text-xs font-semibold text-[#9b5c1c]">
+                      <span className="rounded-full bg-[#fff0b8] px-3 py-1 text-xs font-semibold text-[#fa5c5c]">
                         {event.status || "Not set"}
                       </span>
                     </td>
@@ -92,8 +92,8 @@ export default function ViewEventsPanel({ events }: { events: AppEvent[] }) {
                       <span
                         className={`rounded-full px-3 py-1 text-xs font-semibold ${
                           event.markerStatus === "active"
-                            ? "bg-[#edf8ef] text-[#2d7a43]"
-                            : "bg-[#fff3e9] text-[#9b5c1c]"
+                            ? "bg-[#fff7cf] text-[#fd8a6b]"
+                            : "bg-[#fff0b8] text-[#fa5c5c]"
                         }`}
                       >
                         {event.markerStatus}

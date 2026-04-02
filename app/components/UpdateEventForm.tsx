@@ -4,6 +4,17 @@ import { useActionState, useMemo, useState, type ChangeEvent } from "react";
 
 import type { AppEvent } from "@/lib/events";
 import { updateEventAction } from "../dashboard/event-actions";
+import {
+  internalBodyCopyClassName,
+  internalEyebrowClassName,
+  internalFormInputClassName,
+  internalHeroSectionClassName,
+  internalLabelClassName,
+  internalPrimaryButtonClassName,
+  internalSectionClassName,
+  internalSectionDescriptionClassName,
+  internalSectionTitleClassName,
+} from "./internalTheme";
 
 type EventFormData = {
   eventId: string;
@@ -43,11 +54,9 @@ type EventFormData = {
   markerStatus: "active" | "removed";
 };
 
-const inputClassName =
-  "w-full rounded-2xl border border-[#e9d7cb] bg-white px-4 py-3 text-sm text-[#251916] outline-none transition focus:border-[#8d2925] focus:ring-4 focus:ring-[#8d2925]/10";
+const inputClassName = internalFormInputClassName;
 
-const sectionClassName =
-  "rounded-[1.65rem] border border-[#eadbd0] bg-white/92 p-6 shadow-[0_18px_45px_rgba(94,52,33,0.08)]";
+const sectionClassName = internalSectionClassName;
 
 const eventTypeOptions = [
   "Blood Donation",
@@ -114,8 +123,8 @@ function SectionHeader({
 }) {
   return (
     <div className="mb-5">
-      <h3 className="text-xl font-semibold text-[#241815]">{title}</h3>
-      <p className="mt-1 text-sm leading-6 text-[#71594e]">{description}</p>
+      <h3 className={internalSectionTitleClassName}>{title}</h3>
+      <p className={internalSectionDescriptionClassName}>{description}</p>
     </div>
   );
 }
@@ -132,6 +141,7 @@ type FieldProps = {
   as?: "input" | "textarea" | "select";
   options?: string[];
   className?: string;
+  required?: boolean;
 };
 
 function Field({
@@ -144,10 +154,11 @@ function Field({
   as = "input",
   options = [],
   className = "",
+  required = false,
 }: FieldProps) {
   return (
     <label className={`block ${className}`}>
-      <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-[#8f6b5c]">
+      <span className={internalLabelClassName}>
         {label}
       </span>
       {as === "textarea" ? (
@@ -157,6 +168,7 @@ function Field({
           className={`${inputClassName} min-h-32 resize-y`}
           value={value}
           onChange={onChange}
+          required={required}
         />
       ) : as === "select" ? (
         <select
@@ -164,6 +176,7 @@ function Field({
           className={inputClassName}
           value={value}
           onChange={onChange}
+          required={required}
         >
           <option value="">{placeholder ?? `Select ${label}`}</option>
           {options.map((option) => (
@@ -180,6 +193,7 @@ function Field({
           className={inputClassName}
           value={value}
           onChange={onChange}
+          required={required}
         />
       )}
     </label>
@@ -236,16 +250,16 @@ export default function UpdateEventForm({ events }: { events: AppEvent[] }) {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-[2rem] border border-[#ead7cb] bg-[linear-gradient(135deg,#fffaf7_0%,#fff4ef_58%,#f7e7de_100%)] p-7 shadow-[0_18px_50px_rgba(94,52,33,0.08)]">
-        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#aa725e]">
+      <section className={internalHeroSectionClassName}>
+        <p className={internalEyebrowClassName}>
           Event operations
         </p>
         <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <h2 className="text-3xl font-semibold tracking-tight text-[#241815]">
+            <h2 className={internalSectionTitleClassName.replace("text-xl", "text-3xl tracking-tight")}>
               Update Event
             </h2>
-            <p className="mt-2 max-w-2xl text-sm leading-7 text-[#6d554a]">
+            <p className={`max-w-2xl ${internalBodyCopyClassName}`}>
               Select any saved event and update every field currently supported
               in the add event workflow.
             </p>
@@ -287,6 +301,7 @@ export default function UpdateEventForm({ events }: { events: AppEvent[] }) {
               name="eventName"
               value={formData.eventName}
               onChange={handleChange}
+              required
             />
             <Field
               label="Event Type"
@@ -295,6 +310,7 @@ export default function UpdateEventForm({ events }: { events: AppEvent[] }) {
               options={eventTypeOptions}
               value={formData.eventType}
               onChange={handleChange}
+              required
             />
             {isOtherEventType && (
               <Field
@@ -302,6 +318,7 @@ export default function UpdateEventForm({ events }: { events: AppEvent[] }) {
                 name="customEventType"
                 value={formData.customEventType}
                 onChange={handleChange}
+                required
               />
             )}
             <Field
@@ -310,6 +327,7 @@ export default function UpdateEventForm({ events }: { events: AppEvent[] }) {
               type="date"
               value={formData.startDate}
               onChange={handleChange}
+              required
             />
             <Field
               label="End Date"
@@ -317,6 +335,7 @@ export default function UpdateEventForm({ events }: { events: AppEvent[] }) {
               type="date"
               value={formData.endDate}
               onChange={handleChange}
+              required
             />
             <Field
               label="Start Time"
@@ -420,8 +439,8 @@ export default function UpdateEventForm({ events }: { events: AppEvent[] }) {
               <Field label="Estimated Budget" name="estimatedBudget" value={formData.estimatedBudget} onChange={handleChange} />
               <Field label="Actual Expenses" name="actualExpenses" value={formData.actualExpenses} onChange={handleChange} />
               <Field label="Sponsor" name="sponsor" value={formData.sponsor} onChange={handleChange} />
-              <Field label="Latitude" name="latitude" value={formData.latitude} onChange={handleChange} />
-              <Field label="Longitude" name="longitude" value={formData.longitude} onChange={handleChange} />
+              <Field label="Latitude" name="latitude" value={formData.latitude} onChange={handleChange} required />
+              <Field label="Longitude" name="longitude" value={formData.longitude} onChange={handleChange} required />
             </div>
           </section>
         </div>
@@ -450,7 +469,7 @@ export default function UpdateEventForm({ events }: { events: AppEvent[] }) {
           <button
             type="submit"
             disabled={isPending}
-            className="rounded-full bg-[#7a1418] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#8e2023] disabled:opacity-60"
+            className={internalPrimaryButtonClassName}
           >
             {isPending ? "Updating event..." : "Update event"}
           </button>

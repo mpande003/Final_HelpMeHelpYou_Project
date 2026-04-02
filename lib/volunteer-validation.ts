@@ -6,14 +6,7 @@ export type VolunteerMutableFields = {
   emailAddress: string | null;
   emergencyContactName: string | null;
   emergencyContactPhone: string | null;
-  houseFlatNumber: string | null;
-  streetAreaLocality: string | null;
-  landmark: string | null;
-  villageTownCity: string | null;
-  district: string | null;
-  state: string | null;
-  pinCode: string | null;
-  country: string;
+  fullAddress: string | null;
   idType: string | null;
   idNumber: string | null;
   highestEducationLevel: string | null;
@@ -122,7 +115,7 @@ export function parseVolunteerFormData(
   const areasOfInterest = normalizeMultiValue(formData, "areasOfInterest");
   const availableDays = normalizeMultiValue(formData, "availableDays");
   const dateOfBirth = normalizeString(formData.get("dateOfBirth"));
-  const pinCode = normalizeString(formData.get("pinCode"));
+  const fullAddress = normalizeString(formData.get("fullAddress"));
   const hoursPerWeek = normalizeString(formData.get("hoursPerWeek"));
   const honeypot = normalizeString(formData.get("website"));
 
@@ -184,13 +177,6 @@ export function parseVolunteerFormData(
     }
   }
 
-  if (pinCode && !/^\d{6}$/.test(pinCode)) {
-    return {
-      error: "PIN code must be a 6-digit number.",
-      input: null,
-    };
-  }
-
   if (hoursPerWeek) {
     const parsedHours = Number(hoursPerWeek);
     if (
@@ -233,6 +219,7 @@ export function parseVolunteerFormData(
       normalizeString(formData.get("emergencyContactPhone")),
       MAX_LENGTHS.short,
     ),
+    validateMaxLength("Full address", fullAddress, MAX_LENGTHS.medium),
     validateMaxLength(
       "Skills",
       normalizeString(formData.get("skills")),
@@ -269,15 +256,7 @@ export function parseVolunteerFormData(
         normalizeString(formData.get("emergencyContactName")) || null,
       emergencyContactPhone:
         normalizeString(formData.get("emergencyContactPhone")) || null,
-      houseFlatNumber: normalizeString(formData.get("houseFlatNumber")) || null,
-      streetAreaLocality:
-        normalizeString(formData.get("streetAreaLocality")) || null,
-      landmark: normalizeString(formData.get("landmark")) || null,
-      villageTownCity: normalizeString(formData.get("villageTownCity")) || null,
-      district: normalizeString(formData.get("district")) || null,
-      state: normalizeString(formData.get("state")) || null,
-      pinCode: pinCode || null,
-      country: normalizeString(formData.get("country")) || "India",
+      fullAddress: fullAddress || null,
       idType: normalizeString(formData.get("idType")) || null,
       idNumber: normalizeString(formData.get("idNumber")) || null,
       highestEducationLevel:

@@ -10,11 +10,23 @@ import {
 } from "../dashboard/expense-actions";
 import type { Expense } from "@/lib/expenses";
 import type { AppEvent } from "@/lib/events";
+import {
+  internalCardTitleClassName,
+  internalCardClassName,
+  internalFormInputSoftClassName,
+  internalHeroSectionClassName,
+  internalMetricCardClassName,
+  internalMutedTextClassName,
+  internalPanelEyebrowClassName,
+  internalPrimaryButtonClassName,
+  internalSecondaryButtonClassName,
+  internalTableHeaderClassName,
+  internalTableRowClassName,
+} from "./internalTheme";
 
-const inputClassName =
-  "w-full rounded-xl border border-[#eadfb4] bg-[#fffdf8] px-4 py-3 text-sm text-[#213028] outline-none transition focus:border-[#c19831] focus:ring-4 focus:ring-[#c19831]/10";
+const inputClassName = internalFormInputSoftClassName;
 
-const cardClassName = "rounded-2xl border border-[#eadfb4] bg-white p-5 shadow-sm";
+const cardClassName = internalCardClassName;
 
 function StateMessage({ state }: { state: ExpenseActionState }) {
   if (!state.error && !state.success) {
@@ -94,14 +106,14 @@ export default function ExpensesPanel({
 
   return (
     <div className="space-y-4">
-      <section className="rounded-2xl border border-[#eadfb4] bg-[#fffaf0] p-5 shadow-sm">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#8a7441]">
+      <section className={internalHeroSectionClassName}>
+        <p className={internalPanelEyebrowClassName}>
           Finance operations
         </p>
-        <h2 className="mt-2 text-3xl font-semibold tracking-tight text-[#213028]">
+        <h2 className="mt-2 text-3xl font-semibold tracking-tight text-[#4b302a]">
           Expenses
         </h2>
-        <p className="mt-2 max-w-3xl text-sm leading-6 text-[#776942]">
+        <p className="mt-2 max-w-3xl text-sm leading-6 text-[#7a5a4d]">
           Record spending against NGO programs and events, keep payment status
           current, and maintain a compact finance register inside the admin
           dashboard.
@@ -115,10 +127,10 @@ export default function ExpensesPanel({
           ].map((item) => (
             <div
               key={item.label}
-              className="rounded-xl border border-[#efe4bf] bg-white px-4 py-4"
+              className={internalMetricCardClassName}
             >
-              <p className="text-sm text-[#7e6f45]">{item.label}</p>
-              <p className="mt-2 text-2xl font-semibold text-[#213028]">
+              <p className={internalMutedTextClassName}>{item.label}</p>
+              <p className="mt-2 text-2xl font-semibold text-[#4b302a]">
                 {item.value}
               </p>
             </div>
@@ -128,10 +140,10 @@ export default function ExpensesPanel({
 
       <section className={cardClassName}>
         <div className="mb-4">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#8a7441]">
+          <p className={internalPanelEyebrowClassName}>
             Add expense
           </p>
-          <h3 className="mt-2 text-xl font-semibold text-[#213028]">
+          <h3 className={internalCardTitleClassName}>
             Record a new expense
           </h3>
         </div>
@@ -252,7 +264,7 @@ export default function ExpensesPanel({
             <button
               type="submit"
               disabled={createPending}
-              className="rounded-full bg-[#b08b2e] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#c19831] disabled:opacity-60"
+              className={internalPrimaryButtonClassName}
             >
               {createPending ? "Saving..." : "Save expense"}
             </button>
@@ -263,20 +275,20 @@ export default function ExpensesPanel({
       <section className={cardClassName}>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#8a7441]">
+            <p className={internalPanelEyebrowClassName}>
               Expense register
             </p>
-            <h3 className="mt-2 text-xl font-semibold text-[#213028]">
+            <h3 className={internalCardTitleClassName}>
               All expense entries
             </h3>
           </div>
-          <p className="text-sm text-[#776942]">Total records: {expenses.length}</p>
+          <p className={internalMutedTextClassName}>Total records: {expenses.length}</p>
         </div>
 
         <div className="mt-4 overflow-x-auto">
           <table className="min-w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-[#efe4bf] text-[#8a7441]">
+              <tr className={internalTableHeaderClassName}>
                 <th className="px-3 py-3 font-semibold">Expense</th>
                 <th className="px-3 py-3 font-semibold">Event</th>
                 <th className="px-3 py-3 font-semibold">Category</th>
@@ -289,31 +301,31 @@ export default function ExpensesPanel({
             <tbody>
               {expenses.length === 0 ? (
                 <tr>
-                  <td className="px-3 py-4 text-[#776942]" colSpan={7}>
+                  <td className={`px-3 py-4 ${internalMutedTextClassName}`} colSpan={7}>
                     No expense entries recorded yet.
                   </td>
                 </tr>
               ) : (
                 expenses.map((expense) => (
-                  <tr key={expense.id} className="border-b border-[#f6eed2]">
+                  <tr key={expense.id} className={internalTableRowClassName}>
                     <td className="px-3 py-4">
-                      <p className="font-semibold text-[#213028]">
+                      <p className="font-semibold text-[#4b302a]">
                         {expense.expenseTitle}
                       </p>
-                      <p className="mt-1 text-xs text-[#776942]">
+                      <p className="mt-1 text-xs text-[#7a5a4d]">
                         {expense.vendorName || "No vendor"}
                       </p>
                     </td>
-                    <td className="px-3 py-4 text-[#6d6241]">
+                    <td className="px-3 py-4 text-[#7a5a4d]">
                       {expense.eventName || "General NGO expense"}
                     </td>
-                    <td className="px-3 py-4 text-[#6d6241]">{expense.category}</td>
-                    <td className="px-3 py-4 text-[#213028]">
+                    <td className="px-3 py-4 text-[#7a5a4d]">{expense.category}</td>
+                    <td className="px-3 py-4 text-[#4b302a]">
                       {formatCurrency(expense.amount)}
                     </td>
-                    <td className="px-3 py-4 text-[#6d6241]">{expense.expenseDate}</td>
+                    <td className="px-3 py-4 text-[#7a5a4d]">{expense.expenseDate}</td>
                     <td className="px-3 py-4">
-                      <span className="rounded-full bg-[#fff5d8] px-3 py-1 text-xs font-semibold text-[#8b6b18]">
+                      <span className="rounded-full bg-[#fff7cf] px-3 py-1 text-xs font-semibold text-[#fa5c5c]">
                         {expense.status}
                       </span>
                     </td>
@@ -322,7 +334,7 @@ export default function ExpensesPanel({
                         <button
                           type="button"
                           onClick={() => toggleView(expense.id)}
-                          className="rounded-full border border-[#eadfb4] bg-white px-3 py-1.5 text-xs font-semibold text-[#6d6241]"
+                          className={`${internalSecondaryButtonClassName} px-3 py-1.5 text-xs`}
                         >
                           {selectedExpenseId === expense.id ? "Hide" : "View"}
                         </button>
@@ -334,7 +346,7 @@ export default function ExpensesPanel({
                               selectedExpenseId === expense.id ? !current : true,
                             );
                           }}
-                          className="rounded-full bg-[#fff5d8] px-3 py-1.5 text-xs font-semibold text-[#8b6b18]"
+                          className={`${internalPrimaryButtonClassName} px-3 py-1.5 text-xs`}
                         >
                           Update
                         </button>
@@ -371,18 +383,18 @@ export default function ExpensesPanel({
       {selectedExpense && (
         <section className={cardClassName}>
           <div className="flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#8a7441]">
+              <div>
+              <p className={internalPanelEyebrowClassName}>
                 Expense details
               </p>
-              <h3 className="mt-2 text-xl font-semibold text-[#213028]">
+              <h3 className={internalCardTitleClassName}>
                 {selectedExpense.expenseTitle}
               </h3>
             </div>
             <button
               type="button"
               onClick={() => setEditingExpense((current) => !current)}
-              className="rounded-full border border-[#eadfb4] bg-white px-4 py-2 text-sm font-semibold text-[#8b6b18]"
+              className={internalSecondaryButtonClassName}
             >
               {editingExpense ? "Close update" : "Update expense"}
             </button>
@@ -402,12 +414,12 @@ export default function ExpensesPanel({
             ].map(([label, value]) => (
               <div
                 key={label}
-                className="rounded-xl border border-[#efe4bf] bg-[#fffaf2] px-4 py-4"
+                className={internalMetricCardClassName}
               >
-                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#8a7441]">
+                <p className={internalPanelEyebrowClassName}>
                   {label}
                 </p>
-                <p className="mt-2 text-sm leading-6 text-[#5f5535]">{value}</p>
+                <p className="mt-2 text-sm leading-6 text-[#7a5a4d]">{value}</p>
               </div>
             ))}
           </div>
@@ -567,7 +579,7 @@ export default function ExpensesPanel({
                 <button
                   type="submit"
                   disabled={updatePending}
-                  className="rounded-full bg-[#b08b2e] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#c19831] disabled:opacity-60"
+                  className={internalPrimaryButtonClassName}
                 >
                   {updatePending ? "Updating..." : "Update expense"}
                 </button>

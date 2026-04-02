@@ -16,6 +16,16 @@ import type { BloodDonor, BloodRequest } from "@/lib/blood";
 import type { Expense } from "@/lib/expenses";
 import type { AppEvent } from "@/lib/events";
 import type { Volunteer } from "@/lib/volunteers";
+import {
+  internalCardClassName,
+  internalHeroSectionClassName,
+  internalMetricCardClassName,
+  internalMutedTextClassName,
+  internalPanelEyebrowClassName,
+  internalPrimaryButtonClassName,
+  internalSecondaryButtonClassName,
+  internalSoftMetricCardClassName,
+} from "../components/internalTheme";
 
 type UserSummary = {
   id: number;
@@ -165,16 +175,16 @@ function DashboardHome({
 
   return (
     <div className="space-y-4">
-      <section className="rounded-2xl border border-[#eadfb4] bg-[#fffaf0] p-5 shadow-sm">
+      <section className={internalHeroSectionClassName}>
         <div className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
           <div>
-            <p className="text-[11px] uppercase tracking-[0.3em] text-[#8a7441]">
+            <p className={internalPanelEyebrowClassName}>
               NGO operations
             </p>
-            <h1 className="mt-2 text-3xl font-semibold tracking-tight text-[#213028] sm:text-4xl">
+            <h1 className="mt-2 text-3xl font-semibold tracking-tight text-[#4b302a] sm:text-4xl">
               Welcome back, {currentUsername}.
             </h1>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-[#74673f]">
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-[#7a5a4d]">
               Monitor beneficiaries, events, volunteers, blood support,
               expenses, impact locations, and admin access from one compact
               workspace.
@@ -184,14 +194,14 @@ function DashboardHome({
               <button
                 type="button"
                 onClick={() => onNavigate("events")}
-                className="rounded-full bg-[#b08b2e] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#c19831]"
+                className={internalPrimaryButtonClassName}
               >
                 Manage events
               </button>
               <button
                 type="button"
                 onClick={() => onNavigate("beneficiaries")}
-                className="rounded-full border border-[#e7d79f] bg-white px-4 py-2.5 text-sm font-semibold text-[#8b6b18] transition hover:bg-[#fff8e7]"
+                className={internalSecondaryButtonClassName}
               >
                 Add beneficiary
               </button>
@@ -213,15 +223,15 @@ function DashboardHome({
             ].map((card) => (
               <div
                 key={card.label}
-                className="rounded-xl border border-[#efe4bf] bg-white p-4"
+                className={internalMetricCardClassName}
               >
-                <p className="text-[11px] uppercase tracking-[0.22em] text-[#8d7742]">
+                <p className={internalPanelEyebrowClassName}>
                   {card.label}
                 </p>
-                <p className="mt-2 text-3xl font-semibold text-[#213028]">
+                <p className="mt-2 text-3xl font-semibold text-[#4b302a]">
                   {card.value}
                 </p>
-                <p className="mt-1 text-sm text-[#7a6a40]">{card.note}</p>
+                <p className={`mt-1 ${internalMutedTextClassName}`}>{card.note}</p>
               </div>
             ))}
           </div>
@@ -260,13 +270,13 @@ function DashboardHome({
         ].map((card) => (
           <div
             key={card.title}
-            className={`rounded-xl border border-[#eadfb4] p-4 shadow-sm ${card.tone}`}
+            className={`${internalMetricCardClassName} shadow-sm ${card.tone}`}
           >
-            <p className="text-sm font-medium text-[#7e6f45]">{card.title}</p>
-            <p className="mt-3 text-2xl font-semibold tracking-tight text-[#213028]">
+            <p className={internalMutedTextClassName}>{card.title}</p>
+            <p className="mt-3 text-2xl font-semibold tracking-tight text-[#4b302a]">
               {card.value}
             </p>
-            <p className="mt-1.5 text-sm leading-6 text-[#7a6c46]">{card.note}</p>
+            <p className="mt-1.5 text-sm leading-6 text-[#7a5a4d]">{card.note}</p>
           </div>
         ))}
       </section>
@@ -296,46 +306,46 @@ function DashboardHome({
         ].map((card) => (
           <div
             key={card.title}
-            className="rounded-xl border border-[#eadfb4] bg-white p-4 shadow-sm"
+            className={`${internalMetricCardClassName} shadow-sm`}
           >
-            <p className="text-sm font-medium text-[#7e6f45]">{card.title}</p>
-            <p className="mt-3 text-2xl font-semibold tracking-tight text-[#213028]">
+            <p className={internalMutedTextClassName}>{card.title}</p>
+            <p className="mt-3 text-2xl font-semibold tracking-tight text-[#4b302a]">
               {card.value}
             </p>
-            <p className="mt-1.5 text-sm leading-6 text-[#7a6c46]">{card.note}</p>
+            <p className="mt-1.5 text-sm leading-6 text-[#7a5a4d]">{card.note}</p>
           </div>
         ))}
       </section>
 
       <section className="grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
-        <div className="rounded-2xl border border-[#eadfb4] bg-white p-5 shadow-sm">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#8a7441]">
+        <div className={internalCardClassName}>
+          <p className={internalPanelEyebrowClassName}>
             Expense ranking
           </p>
-          <h2 className="mt-2 text-xl font-semibold text-[#213028]">
+          <h2 className="mt-2 text-xl font-semibold text-[#4b302a]">
             Expenses per event
           </h2>
 
           <div className="mt-4 space-y-3">
             {eventExpenseTotals.length === 0 ? (
-              <div className="rounded-xl border border-dashed border-[#eadfb4] bg-[#fffaf0] p-5 text-sm text-[#7a6c46]">
+              <div className="rounded-xl border border-dashed border-[#fec288] bg-[#fffdf3] p-5 text-sm text-[#7a5a4d]">
                 No expense entries recorded yet.
               </div>
             ) : (
               eventExpenseTotals.map((item, index) => (
                 <div
                   key={item.eventName}
-                  className="flex items-center justify-between gap-3 rounded-xl border border-[#efe4bf] bg-[#fffaf2] px-4 py-3"
+                  className={`flex items-center justify-between gap-3 ${internalSoftMetricCardClassName}`}
                 >
                   <div>
-                    <p className="text-sm font-semibold text-[#213028]">
+                    <p className="text-sm font-semibold text-[#4b302a]">
                       {index + 1}. {item.eventName}
                     </p>
-                    <p className="mt-1 text-xs text-[#7a6c46]">
+                    <p className="mt-1 text-xs text-[#7a5a4d]">
                       Sorted high to low
                     </p>
                   </div>
-                  <p className="text-sm font-semibold text-[#8b6b18]">
+                  <p className="text-sm font-semibold text-[#fa5c5c]">
                     {formatCurrency(item.total)}
                   </p>
                 </div>
@@ -344,17 +354,17 @@ function DashboardHome({
           </div>
         </div>
 
-        <div className="rounded-2xl border border-[#eadfb4] bg-white p-5 shadow-sm">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#8a7441]">
+        <div className={internalCardClassName}>
+          <p className={internalPanelEyebrowClassName}>
             Impact snapshot
           </p>
-          <h2 className="mt-2 text-xl font-semibold text-[#213028]">
+          <h2 className="mt-2 text-xl font-semibold text-[#4b302a]">
             Small impact map
           </h2>
 
-          <div className="mt-4 h-[260px] overflow-hidden rounded-xl border border-[#efe4bf] bg-[#fffaf2]">
+          <div className="mt-4 h-[260px] overflow-hidden rounded-xl border border-[#fec288] bg-[#fffdf3]">
             {activeMapEvents.length === 0 ? (
-              <div className="flex h-full items-center justify-center px-4 text-center text-sm text-[#7a6c46]">
+              <div className="flex h-full items-center justify-center px-4 text-center text-sm text-[#7a5a4d]">
                 No active mapped events available.
               </div>
             ) : (
@@ -365,44 +375,44 @@ function DashboardHome({
               />
             )}
           </div>
-          <p className="mt-3 text-sm text-[#776942]">
+          <p className={`mt-3 ${internalMutedTextClassName}`}>
             {activeMapEvents.length} active event markers currently visible.
           </p>
         </div>
       </section>
 
       <section className="grid gap-4 xl:grid-cols-[1.05fr_0.95fr]">
-        <div className="rounded-2xl border border-[#eadfb4] bg-white p-5 shadow-sm">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#8a7441]">
+        <div className={internalCardClassName}>
+          <p className={internalPanelEyebrowClassName}>
             Recent activity
           </p>
-          <h2 className="mt-2 text-xl font-semibold text-[#213028]">Audit snapshot</h2>
+          <h2 className="mt-2 text-xl font-semibold text-[#4b302a]">Audit snapshot</h2>
 
           <div className="mt-4 space-y-3">
             {recentAuditLogs.length === 0 ? (
-              <div className="rounded-xl border border-dashed border-[#eadfb4] bg-[#fffaf0] p-5 text-sm text-[#7a6c46]">
+              <div className="rounded-xl border border-dashed border-[#fec288] bg-[#fffdf3] p-5 text-sm text-[#7a5a4d]">
                 No audit events have been recorded yet.
               </div>
             ) : (
               recentAuditLogs.map((log) => (
                 <div
                   key={log.id}
-                  className="rounded-xl border border-[#efe4bf] bg-[#fffaf2] p-4"
+                  className={internalSoftMetricCardClassName}
                 >
                   <div className="flex flex-wrap items-center justify-between gap-3">
-                    <p className="text-sm font-semibold text-[#213028]">
+                    <p className="text-sm font-semibold text-[#4b302a]">
                       {formatActionLabel(log.action)}
                     </p>
-                    <span className="rounded-full bg-white px-3 py-1 text-xs font-medium text-[#7a6c46]">
+                    <span className="rounded-full bg-white px-3 py-1 text-xs font-medium text-[#7a5a4d]">
                       {log.createdAt}
                     </span>
                   </div>
-                  <p className="mt-2 text-sm text-[#776942]">
-                    <span className="font-medium text-[#213028]">
+                  <p className="mt-2 text-sm text-[#7a5a4d]">
+                    <span className="font-medium text-[#4b302a]">
                       {log.actorUsername}
                     </span>{" "}
                     acted on{" "}
-                    <span className="font-medium text-[#213028]">
+                    <span className="font-medium text-[#4b302a]">
                       {log.targetUsername}
                     </span>
                     {log.details ? ` (${log.details})` : ""}.
@@ -413,11 +423,11 @@ function DashboardHome({
           </div>
         </div>
 
-        <div className="rounded-2xl border border-[#eadfb4] bg-white p-5 shadow-sm">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#8a7441]">
+        <div className={internalCardClassName}>
+          <p className={internalPanelEyebrowClassName}>
             Operational notes
           </p>
-          <h2 className="mt-2 text-xl font-semibold text-[#213028]">
+          <h2 className="mt-2 text-xl font-semibold text-[#4b302a]">
             What needs attention
           </h2>
 
@@ -430,7 +440,7 @@ function DashboardHome({
             ].map((item) => (
               <div
                 key={item}
-                className="rounded-xl border border-[#efe4bf] bg-[#fffaf2] px-4 py-3 text-sm text-[#6f623d]"
+                className={`${internalSoftMetricCardClassName} text-sm text-[#7a5a4d]`}
               >
                 {item}
               </div>
@@ -510,17 +520,17 @@ export default function DashboardClient({
   };
 
   return (
-    <div className="min-h-screen bg-[#fff9ee] text-[#213028]">
+    <div className="min-h-screen bg-[#fffdf0] text-[#4b302a]">
       <div className="mx-auto grid min-h-screen max-w-[1480px] gap-4 px-3 py-3 lg:grid-cols-[240px_minmax(0,1fr)] lg:px-4 lg:py-4">
-        <aside className="rounded-2xl border border-[#eadfb4] bg-[#fffdf8] p-4 shadow-sm">
-          <div className="rounded-xl border border-[#efe4bf] bg-white p-3.5">
-            <p className="text-[11px] uppercase tracking-[0.22em] text-[#8a7441]">
+        <aside className="rounded-2xl border border-[#fec288] bg-[#fffdf3] p-4 shadow-sm">
+          <div className="rounded-xl border border-[#fec288] bg-white p-3.5">
+            <p className="text-[11px] uppercase tracking-[0.22em] text-[#fa5c5c]">
               Signed in as
             </p>
-            <p className="mt-1.5 text-base font-semibold text-[#213028]">
+            <p className="mt-1.5 text-base font-semibold text-[#4b302a]">
               {currentUsername}
             </p>
-            <p className="mt-1 text-sm text-[#776942]">Protected admin session.</p>
+            <p className="mt-1 text-sm text-[#7a5a4d]">Protected admin session.</p>
           </div>
 
           <nav className="mt-4 space-y-1.5">
@@ -534,32 +544,32 @@ export default function DashboardClient({
                   onClick={() => setMenu(item.id)}
                   className={`flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-left text-sm font-medium transition ${
                     isActive
-                      ? "bg-[#b08b2e] text-white"
+                      ? "border border-[#fa5c5c] bg-[#fa5c5c] text-white shadow-[0_10px_24px_rgba(250,92,92,0.24)]"
                       : item.tone === "accent"
-                        ? "bg-[#fff7df] text-[#8b6b18] hover:bg-[#fff2c7]"
-                        : "text-[#5d5636] hover:bg-[#fff8e8]"
+                        ? "border border-[#fec288] bg-[#fff7cf] text-[#fa5c5c] hover:bg-[#fff0b8]"
+                        : "text-[#7a5a4d] hover:bg-[#fff7cf]"
                   }`}
                 >
                   <span>{item.label}</span>
-                  {isActive && <span className="h-2 w-2 rounded-full bg-white" />}
+                  {isActive && <span className="h-2.5 w-2.5 rounded-full bg-[#fbef76]" />}
                 </button>
               );
             })}
           </nav>
 
-          <div className="mt-4 rounded-xl border border-[#efe4bf] bg-white p-3.5">
-            <p className="text-[11px] uppercase tracking-[0.22em] text-[#8a7441]">
+          <div className="mt-4 rounded-xl border border-[#fec288] bg-white p-3.5">
+            <p className="text-[11px] uppercase tracking-[0.22em] text-[#fa5c5c]">
               Current state
             </p>
             <div className="mt-3 flex items-center justify-between text-sm">
-              <span className="text-[#5d5636]">Protected routes</span>
-              <span className="rounded-full bg-[#fff5d8] px-3 py-1 font-medium text-[#8b6b18]">
+              <span className="text-[#7a5a4d]">Protected routes</span>
+              <span className="rounded-full bg-[#fff0b8] px-3 py-1 font-medium text-[#fa5c5c]">
                 Active
               </span>
             </div>
             <div className="mt-2 flex items-center justify-between text-sm">
-              <span className="text-[#5d5636]">Audit logging</span>
-              <span className="rounded-full bg-[#fff8e7] px-3 py-1 font-medium text-[#987828]">
+              <span className="text-[#7a5a4d]">Audit logging</span>
+              <span className="rounded-full bg-[#fff7cf] px-3 py-1 font-medium text-[#fd8a6b]">
                 Enabled
               </span>
             </div>
@@ -568,13 +578,13 @@ export default function DashboardClient({
           <button
             type="button"
             onClick={logout}
-            className="mt-4 w-full rounded-xl border border-[#eadfb4] bg-white px-4 py-2.5 text-sm font-semibold text-[#8b6b18] transition hover:bg-[#fff8e8]"
+            className="mt-4 w-full rounded-xl border border-[#fec288] bg-white px-4 py-2.5 text-sm font-semibold text-[#fa5c5c] transition hover:bg-[#fff7cf]"
           >
             Logout
           </button>
         </aside>
 
-        <main className="min-w-0 rounded-2xl border border-[#eadfb4] bg-[#fffdf8] p-3 shadow-sm sm:p-4 lg:p-5">
+        <main className="min-w-0 rounded-2xl border border-[#fec288] bg-[#fffdf3] p-3 shadow-sm sm:p-4 lg:p-5">
           <div className="min-w-0">{renderContent()}</div>
         </main>
       </div>

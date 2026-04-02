@@ -29,6 +29,7 @@ function initializeVolunteerDatabase(db: DatabaseInstance) {
       email_address TEXT,
       emergency_contact_name TEXT,
       emergency_contact_phone TEXT,
+      full_address TEXT,
       house_flat_number TEXT,
       street_area_locality TEXT,
       landmark TEXT,
@@ -116,6 +117,96 @@ function initializeVolunteerDatabase(db: DatabaseInstance) {
       "ALTER TABLE volunteers ADD COLUMN updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP;",
     );
   }
+
+  if (!existingColumns.has("full_address")) {
+    db.exec("ALTER TABLE volunteers ADD COLUMN full_address TEXT;");
+  }
+
+  db.exec(`
+    UPDATE volunteers
+    SET full_address = trim(
+      COALESCE(NULLIF(house_flat_number, ''), '') ||
+      CASE
+        WHEN NULLIF(street_area_locality, '') IS NOT NULL AND NULLIF(house_flat_number, '') IS NOT NULL THEN ', '
+        ELSE ''
+      END ||
+      COALESCE(NULLIF(street_area_locality, ''), '') ||
+      CASE
+        WHEN NULLIF(landmark, '') IS NOT NULL AND (
+          NULLIF(house_flat_number, '') IS NOT NULL OR
+          NULLIF(street_area_locality, '') IS NOT NULL
+        ) THEN ', '
+        ELSE ''
+      END ||
+      COALESCE(NULLIF(landmark, ''), '') ||
+      CASE
+        WHEN NULLIF(village_town_city, '') IS NOT NULL AND (
+          NULLIF(house_flat_number, '') IS NOT NULL OR
+          NULLIF(street_area_locality, '') IS NOT NULL OR
+          NULLIF(landmark, '') IS NOT NULL
+        ) THEN ', '
+        ELSE ''
+      END ||
+      COALESCE(NULLIF(village_town_city, ''), '') ||
+      CASE
+        WHEN NULLIF(district, '') IS NOT NULL AND (
+          NULLIF(house_flat_number, '') IS NOT NULL OR
+          NULLIF(street_area_locality, '') IS NOT NULL OR
+          NULLIF(landmark, '') IS NOT NULL OR
+          NULLIF(village_town_city, '') IS NOT NULL
+        ) THEN ', '
+        ELSE ''
+      END ||
+      COALESCE(NULLIF(district, ''), '') ||
+      CASE
+        WHEN NULLIF(state, '') IS NOT NULL AND (
+          NULLIF(house_flat_number, '') IS NOT NULL OR
+          NULLIF(street_area_locality, '') IS NOT NULL OR
+          NULLIF(landmark, '') IS NOT NULL OR
+          NULLIF(village_town_city, '') IS NOT NULL OR
+          NULLIF(district, '') IS NOT NULL
+        ) THEN ', '
+        ELSE ''
+      END ||
+      COALESCE(NULLIF(state, ''), '') ||
+      CASE
+        WHEN NULLIF(pin_code, '') IS NOT NULL AND (
+          NULLIF(house_flat_number, '') IS NOT NULL OR
+          NULLIF(street_area_locality, '') IS NOT NULL OR
+          NULLIF(landmark, '') IS NOT NULL OR
+          NULLIF(village_town_city, '') IS NOT NULL OR
+          NULLIF(district, '') IS NOT NULL OR
+          NULLIF(state, '') IS NOT NULL
+        ) THEN ', '
+        ELSE ''
+      END ||
+      COALESCE(NULLIF(pin_code, ''), '') ||
+      CASE
+        WHEN NULLIF(country, '') IS NOT NULL AND (
+          NULLIF(house_flat_number, '') IS NOT NULL OR
+          NULLIF(street_area_locality, '') IS NOT NULL OR
+          NULLIF(landmark, '') IS NOT NULL OR
+          NULLIF(village_town_city, '') IS NOT NULL OR
+          NULLIF(district, '') IS NOT NULL OR
+          NULLIF(state, '') IS NOT NULL OR
+          NULLIF(pin_code, '') IS NOT NULL
+        ) THEN ', '
+        ELSE ''
+      END ||
+      COALESCE(NULLIF(country, ''), '')
+    )
+    WHERE (full_address IS NULL OR trim(full_address) = '')
+      AND (
+        NULLIF(house_flat_number, '') IS NOT NULL OR
+        NULLIF(street_area_locality, '') IS NOT NULL OR
+        NULLIF(landmark, '') IS NOT NULL OR
+        NULLIF(village_town_city, '') IS NOT NULL OR
+        NULLIF(district, '') IS NOT NULL OR
+        NULLIF(state, '') IS NOT NULL OR
+        NULLIF(pin_code, '') IS NOT NULL OR
+        NULLIF(country, '') IS NOT NULL
+      );
+  `);
 }
 
 export function buildVolunteerSubmissionKey(value: string) {
@@ -241,7 +332,9 @@ function migrateExistingVolunteerData(db: DatabaseInstance) {
       `
         SELECT
           full_name, date_of_birth, gender, phone_number, email_address,
-          emergency_contact_name, emergency_contact_phone, house_flat_number,
+          emergency_contact_name, emergency_contact_phone,
+          ${selectOrDefault("full_address", "NULL")},
+          house_flat_number,
           street_area_locality, landmark, village_town_city, district, state,
           pin_code, country, id_type, id_number, id_proof_file,
           highest_education_level, field_of_study, college_school_name,
@@ -272,7 +365,8 @@ function migrateExistingVolunteerData(db: DatabaseInstance) {
   const insertVolunteer = db.prepare(`
     INSERT INTO volunteers (
       full_name, date_of_birth, gender, phone_number, email_address,
-      emergency_contact_name, emergency_contact_phone, house_flat_number,
+      emergency_contact_name, emergency_contact_phone, full_address,
+      house_flat_number,
       street_area_locality, landmark, village_town_city, district, state,
       pin_code, country, id_type, id_number, id_proof_file,
       highest_education_level, field_of_study, college_school_name,
@@ -287,7 +381,8 @@ function migrateExistingVolunteerData(db: DatabaseInstance) {
       created_at, updated_at
     ) VALUES (
       @full_name, @date_of_birth, @gender, @phone_number, @email_address,
-      @emergency_contact_name, @emergency_contact_phone, @house_flat_number,
+      @emergency_contact_name, @emergency_contact_phone, @full_address,
+      @house_flat_number,
       @street_area_locality, @landmark, @village_town_city, @district, @state,
       @pin_code, @country, @id_type, @id_number, @id_proof_file,
       @highest_education_level, @field_of_study, @college_school_name,

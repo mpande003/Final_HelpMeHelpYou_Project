@@ -4,6 +4,20 @@ import { useActionState } from "react";
 
 import { createUserAction, resetUserPasswordAction } from "./actions";
 import UserManagementRowActions from "./UserManagementRowActions";
+import {
+  internalCardTitleClassName,
+  internalFormInputClassName,
+  internalLabelClassName,
+  internalMetricCardClassName,
+  internalMutedTextClassName,
+  internalPanelEyebrowClassName,
+  internalPrimaryButtonClassName,
+  internalSectionClassName,
+  internalSecondaryButtonClassName,
+  internalTableHeaderClassName,
+  internalTableRowClassName,
+  internalHeroSectionClassName,
+} from "../components/internalTheme";
 
 type UserSummary = {
   id: number;
@@ -85,7 +99,7 @@ export default function UserManagementPanel({
 
   return (
     <div className="space-y-6">
-      <section className="rounded-[2rem] border border-[#ead7cb] bg-[linear-gradient(135deg,#fffaf7_0%,#fff4ef_58%,#f7e7de_100%)] p-7 shadow-[0_18px_50px_rgba(94,52,33,0.08)]">
+      <section className={internalHeroSectionClassName}>
         <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#aa725e]">
           Access control
         </p>
@@ -108,10 +122,10 @@ export default function UserManagementPanel({
             ].map((item) => (
               <div
                 key={item.label}
-                className="rounded-2xl border border-[#ead8cb] bg-white/82 px-4 py-4 text-sm"
+                className={internalMetricCardClassName}
               >
-                <p className="text-[#88695d]">{item.label}</p>
-                <p className="mt-1 text-2xl font-semibold text-[#251916]">
+                <p className={internalMutedTextClassName}>{item.label}</p>
+                <p className="mt-1 text-2xl font-semibold text-[#4b302a]">
                   {item.value}
                 </p>
               </div>
@@ -121,14 +135,14 @@ export default function UserManagementPanel({
       </section>
 
       <div className="grid gap-6 xl:grid-cols-2">
-        <section className="rounded-[1.75rem] border border-[#eadbd0] bg-white/92 p-6 shadow-[0_18px_45px_rgba(94,52,33,0.08)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#ad725d]">
+        <section className={internalSectionClassName}>
+          <p className={internalPanelEyebrowClassName}>
             Create admin
           </p>
-          <h3 className="mt-2 text-2xl font-semibold text-[#241815]">
+          <h3 className={internalCardTitleClassName}>
             Add a new account
           </h3>
-          <p className="mt-2 text-sm leading-6 text-[#71594e]">
+          <p className="mt-2 text-sm leading-6 text-[#7a5a4d]">
             New users can sign in immediately after creation and will appear in
             the access table below.
           </p>
@@ -137,15 +151,15 @@ export default function UserManagementPanel({
             <div>
               <label
                 htmlFor="create-username"
-                className="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-[#8f6b5c]"
+                className={internalLabelClassName}
               >
-                Username
+                Username <span className="required-indicator">*</span>
               </label>
               <input
                 id="create-username"
                 name="username"
                 type="text"
-                className="w-full rounded-2xl border border-[#e9d7cb] bg-white px-4 py-3 text-sm text-[#251916] outline-none transition focus:border-[#8d2925] focus:ring-4 focus:ring-[#8d2925]/10"
+                className={internalFormInputClassName}
                 placeholder="new-admin"
                 required
               />
@@ -154,15 +168,15 @@ export default function UserManagementPanel({
             <div>
               <label
                 htmlFor="create-password"
-                className="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-[#8f6b5c]"
+                className={internalLabelClassName}
               >
-                Password
+                Password <span className="required-indicator">*</span>
               </label>
               <input
                 id="create-password"
                 name="password"
                 type="password"
-                className="w-full rounded-2xl border border-[#e9d7cb] bg-white px-4 py-3 text-sm text-[#251916] outline-none transition focus:border-[#8d2925] focus:ring-4 focus:ring-[#8d2925]/10"
+                className={internalFormInputClassName}
                 placeholder="At least 8 characters"
                 required
               />
@@ -171,14 +185,14 @@ export default function UserManagementPanel({
             <div>
               <label
                 htmlFor="create-role"
-                className="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-[#8f6b5c]"
+                className={internalLabelClassName}
               >
                 Role
               </label>
               <select
                 id="create-role"
                 name="role"
-                className="w-full rounded-2xl border border-[#e9d7cb] bg-white px-4 py-3 text-sm text-[#251916] outline-none transition focus:border-[#8d2925] focus:ring-4 focus:ring-[#8d2925]/10"
+                className={internalFormInputClassName}
                 defaultValue="admin"
               >
                 <option value="admin">Admin</option>
@@ -193,21 +207,21 @@ export default function UserManagementPanel({
             <button
               type="submit"
               disabled={createPending}
-              className="rounded-full bg-[#7a1418] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#8e2023] disabled:opacity-60"
+              className={internalPrimaryButtonClassName}
             >
               {createPending ? "Creating..." : "Create User"}
             </button>
           </form>
         </section>
 
-        <section className="rounded-[1.75rem] border border-[#eadbd0] bg-white/92 p-6 shadow-[0_18px_45px_rgba(94,52,33,0.08)]">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#ad725d]">
+        <section className={internalSectionClassName}>
+          <p className={internalPanelEyebrowClassName}>
             Credential recovery
           </p>
-          <h3 className="mt-2 text-2xl font-semibold text-[#241815]">
+          <h3 className={internalCardTitleClassName}>
             Reset a password
           </h3>
-          <p className="mt-2 text-sm leading-6 text-[#71594e]">
+          <p className="mt-2 text-sm leading-6 text-[#7a5a4d]">
             Replace credentials for any account. Your own account requires the
             current password as confirmation.
           </p>
@@ -216,14 +230,14 @@ export default function UserManagementPanel({
             <div>
               <label
                 htmlFor="reset-username"
-                className="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-[#8f6b5c]"
+                className={internalLabelClassName}
               >
-                Username
+                Username <span className="required-indicator">*</span>
               </label>
               <select
                 id="reset-username"
                 name="username"
-                className="w-full rounded-2xl border border-[#e9d7cb] bg-white px-4 py-3 text-sm text-[#251916] outline-none transition focus:border-[#8d2925] focus:ring-4 focus:ring-[#8d2925]/10"
+                className={internalFormInputClassName}
                 required
                 defaultValue=""
               >
@@ -241,15 +255,15 @@ export default function UserManagementPanel({
             <div>
               <label
                 htmlFor="reset-password"
-                className="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-[#8f6b5c]"
+                className={internalLabelClassName}
               >
-                New Password
+                New Password <span className="required-indicator">*</span>
               </label>
               <input
                 id="reset-password"
                 name="password"
                 type="password"
-                className="w-full rounded-2xl border border-[#e9d7cb] bg-white px-4 py-3 text-sm text-[#251916] outline-none transition focus:border-[#8d2925] focus:ring-4 focus:ring-[#8d2925]/10"
+                className={internalFormInputClassName}
                 placeholder="At least 8 characters"
                 required
               />
@@ -258,7 +272,7 @@ export default function UserManagementPanel({
             <div>
               <label
                 htmlFor="reset-current-password"
-                className="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-[#8f6b5c]"
+                className={internalLabelClassName}
               >
                 Current Password
               </label>
@@ -266,7 +280,7 @@ export default function UserManagementPanel({
                 id="reset-current-password"
                 name="currentPassword"
                 type="password"
-                className="w-full rounded-2xl border border-[#e9d7cb] bg-white px-4 py-3 text-sm text-[#251916] outline-none transition focus:border-[#8d2925] focus:ring-4 focus:ring-[#8d2925]/10"
+                className={internalFormInputClassName}
                 placeholder={`Only required for ${currentUsername}`}
               />
             </div>
@@ -279,7 +293,7 @@ export default function UserManagementPanel({
             <button
               type="submit"
               disabled={resetPending}
-              className="rounded-full bg-[#365fc9] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#274fb8] disabled:opacity-60"
+              className={internalSecondaryButtonClassName}
             >
               {resetPending ? "Resetting..." : "Reset Password"}
             </button>
@@ -287,17 +301,17 @@ export default function UserManagementPanel({
         </section>
       </div>
 
-      <section className="rounded-[1.75rem] border border-[#eadbd0] bg-white/92 p-6 shadow-[0_18px_45px_rgba(94,52,33,0.08)]">
+      <section className={internalSectionClassName}>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#ad725d]">
+            <p className={internalPanelEyebrowClassName}>
               Access table
             </p>
-            <h3 className="mt-2 text-2xl font-semibold text-[#241815]">
+            <h3 className={internalCardTitleClassName}>
               Existing Users
             </h3>
           </div>
-          <p className="text-sm text-[#71594e]">
+          <p className={internalMutedTextClassName}>
             Status changes and deletions are available inline for fast admin
             control.
           </p>
@@ -306,7 +320,7 @@ export default function UserManagementPanel({
         <div className="mt-5 overflow-x-auto">
           <table className="min-w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-[#efe2d8] text-[#8d6f62]">
+              <tr className={internalTableHeaderClassName}>
                 <th className="px-3 py-3 font-semibold">Username</th>
                 <th className="px-3 py-3 font-semibold">Role</th>
                 <th className="px-3 py-3 font-semibold">Status</th>
@@ -317,31 +331,31 @@ export default function UserManagementPanel({
             </thead>
             <tbody>
               {users.map((user) => (
-                <tr key={user.id} className="border-b border-[#f5ece5]">
-                  <td className="px-3 py-4 font-semibold text-[#241815]">
+                <tr key={user.id} className={internalTableRowClassName}>
+                  <td className="px-3 py-4 font-semibold text-[#4b302a]">
                     {user.username}
                     {user.username === currentUsername && (
-                      <span className="ml-2 rounded-full bg-[#fef2e9] px-2.5 py-1 text-xs font-medium text-[#9b5a2a]">
+                      <span className="ml-2 rounded-full bg-[#fff7cf] px-2.5 py-1 text-xs font-medium text-[#fa5c5c]">
                         You
                       </span>
                     )}
                   </td>
-                  <td className="px-3 py-4 text-[#6f564b]">{user.role}</td>
+                  <td className="px-3 py-4 text-[#7a5a4d]">{user.role}</td>
                   <td className="px-3 py-4">
                     <span
                       className={`rounded-full px-3 py-1 text-xs font-semibold ${
                         user.status === "active"
-                          ? "bg-[#edf8ef] text-[#2d7a43]"
-                          : "bg-[#fff3e9] text-[#9b5c1c]"
+                          ? "bg-[#fff7cf] text-[#fa5c5c]"
+                          : "bg-[#fff1e6] text-[#fd8a6b]"
                       }`}
                     >
                       {user.status}
                     </span>
                   </td>
-                  <td className="px-3 py-4 text-[#6f564b]">
+                  <td className="px-3 py-4 text-[#7a5a4d]">
                     {user.createdAt ?? "-"}
                   </td>
-                  <td className="px-3 py-4 text-[#6f564b]">
+                  <td className="px-3 py-4 text-[#7a5a4d]">
                     {user.updatedAt ?? "-"}
                   </td>
                   <td className="px-3 py-4">
@@ -358,17 +372,17 @@ export default function UserManagementPanel({
         </div>
       </section>
 
-      <section className="rounded-[1.75rem] border border-[#eadbd0] bg-white/92 p-6 shadow-[0_18px_45px_rgba(94,52,33,0.08)]">
+      <section className={internalSectionClassName}>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#ad725d]">
+            <p className={internalPanelEyebrowClassName}>
               Compliance trail
             </p>
-            <h3 className="mt-2 text-2xl font-semibold text-[#241815]">
+            <h3 className={internalCardTitleClassName}>
               Audit Log
             </h3>
           </div>
-          <p className="text-sm text-[#71594e]">
+          <p className={internalMutedTextClassName}>
             All key account actions are captured for visibility and review.
           </p>
         </div>
@@ -376,7 +390,7 @@ export default function UserManagementPanel({
         <div className="mt-5 overflow-x-auto">
           <table className="min-w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-[#efe2d8] text-[#8d6f62]">
+              <tr className={internalTableHeaderClassName}>
                 <th className="px-3 py-3 font-semibold">Time</th>
                 <th className="px-3 py-3 font-semibold">Actor</th>
                 <th className="px-3 py-3 font-semibold">Action</th>
@@ -387,24 +401,24 @@ export default function UserManagementPanel({
             <tbody>
               {auditLogs.length === 0 ? (
                 <tr>
-                  <td className="px-3 py-4 text-[#7b6358]" colSpan={5}>
+                  <td className={`px-3 py-4 ${internalMutedTextClassName}`} colSpan={5}>
                     No audit events yet.
                   </td>
                 </tr>
               ) : (
                 auditLogs.map((log) => (
-                  <tr key={log.id} className="border-b border-[#f5ece5]">
-                    <td className="px-3 py-4 text-[#6f564b]">{log.createdAt}</td>
-                    <td className="px-3 py-4 font-medium text-[#241815]">
+                  <tr key={log.id} className={internalTableRowClassName}>
+                    <td className="px-3 py-4 text-[#7a5a4d]">{log.createdAt}</td>
+                    <td className="px-3 py-4 font-medium text-[#4b302a]">
                       {log.actorUsername}
                     </td>
-                    <td className="px-3 py-4 text-[#6f564b]">
+                    <td className="px-3 py-4 text-[#7a5a4d]">
                       {formatActionLabel(log.action)}
                     </td>
-                    <td className="px-3 py-4 text-[#6f564b]">
+                    <td className="px-3 py-4 text-[#7a5a4d]">
                       {log.targetUsername}
                     </td>
-                    <td className="px-3 py-4 text-[#6f564b]">
+                    <td className="px-3 py-4 text-[#7a5a4d]">
                       {log.details ?? "-"}
                     </td>
                   </tr>

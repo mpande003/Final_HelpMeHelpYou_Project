@@ -12,6 +12,18 @@ import {
   updateVolunteerAction,
 } from "../dashboard/volunteer-actions";
 import type { Volunteer } from "@/lib/volunteers";
+import {
+  internalBodyCopyClassName,
+  internalEyebrowClassName,
+  internalFormInputClassName,
+  internalHeroSectionClassName,
+  internalLabelClassName,
+  internalPrimaryButtonClassName,
+  internalSecondaryButtonClassName,
+  internalSectionClassName,
+  internalSectionDescriptionClassName,
+  internalSectionTitleClassName,
+} from "./internalTheme";
 
 type VolunteerRegistrationFormProps = {
   volunteers: Volunteer[];
@@ -28,14 +40,7 @@ type VolunteerFormData = {
   emailAddress: string;
   emergencyContactName: string;
   emergencyContactPhone: string;
-  houseFlatNumber: string;
-  streetAreaLocality: string;
-  landmark: string;
-  villageTownCity: string;
-  district: string;
-  state: string;
-  pinCode: string;
-  country: string;
+  fullAddress: string;
   idType: string;
   idNumber: string;
   highestEducationLevel: string;
@@ -66,14 +71,7 @@ const initialFormData: VolunteerFormData = {
   emailAddress: "",
   emergencyContactName: "",
   emergencyContactPhone: "",
-  houseFlatNumber: "",
-  streetAreaLocality: "",
-  landmark: "",
-  villageTownCity: "",
-  district: "",
-  state: "",
-  pinCode: "",
-  country: "India",
+  fullAddress: "",
   idType: "",
   idNumber: "",
   highestEducationLevel: "",
@@ -96,11 +94,9 @@ const initialFormData: VolunteerFormData = {
   consentPolicies: false,
 };
 
-const inputClassName =
-  "w-full rounded-2xl border border-[#e9d7cb] bg-white px-4 py-3 text-sm text-[#251916] outline-none transition focus:border-[#8d2925] focus:ring-4 focus:ring-[#8d2925]/10";
+const inputClassName = internalFormInputClassName;
 
-const sectionClassName =
-  "rounded-[1.65rem] border border-[#eadbd0] bg-white/92 p-6 shadow-[0_18px_45px_rgba(94,52,33,0.08)]";
+const sectionClassName = internalSectionClassName;
 
 const interestOptions = [
   "Teaching",
@@ -145,14 +141,7 @@ function getInitialFormData(volunteer: Volunteer | null): VolunteerFormData {
     emailAddress: volunteer.emailAddress ?? "",
     emergencyContactName: volunteer.emergencyContactName ?? "",
     emergencyContactPhone: volunteer.emergencyContactPhone ?? "",
-    houseFlatNumber: volunteer.houseFlatNumber ?? "",
-    streetAreaLocality: volunteer.streetAreaLocality ?? "",
-    landmark: volunteer.landmark ?? "",
-    villageTownCity: volunteer.villageTownCity ?? "",
-    district: volunteer.district ?? "",
-    state: volunteer.state ?? "",
-    pinCode: volunteer.pinCode ?? "",
-    country: volunteer.country ?? "India",
+    fullAddress: volunteer.fullAddress ?? "",
     idType: volunteer.idType ?? "",
     idNumber: volunteer.idNumber ?? "",
     highestEducationLevel: volunteer.highestEducationLevel ?? "",
@@ -186,8 +175,8 @@ function SectionHeader({
 }) {
   return (
     <div className="mb-5">
-      <h3 className="text-xl font-semibold text-[#241815]">{title}</h3>
-      <p className="mt-1 text-sm leading-6 text-[#71594e]">{description}</p>
+      <h3 className={internalSectionTitleClassName}>{title}</h3>
+      <p className={internalSectionDescriptionClassName}>{description}</p>
     </div>
   );
 }
@@ -221,7 +210,7 @@ function Field({
 }: FieldProps) {
   return (
     <label className={`block ${className}`}>
-      <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-[#8f6b5c]">
+      <span className={internalLabelClassName}>
         {label}
       </span>
       {as === "textarea" ? (
@@ -362,15 +351,15 @@ export default function VolunteerRegistrationForm({
 
   return (
     <div className="space-y-6">
-      <section className="rounded-[2rem] border border-[#ead7cb] bg-[linear-gradient(135deg,#fffaf7_0%,#fff4ef_58%,#f7e7de_100%)] p-7 shadow-[0_18px_50px_rgba(94,52,33,0.08)]">
+      <section className={internalHeroSectionClassName}>
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#aa725e]">
+          <p className={internalEyebrowClassName}>
             Volunteer operations
           </p>
-            <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#241815]">
+            <h2 className={`mt-3 ${internalSectionTitleClassName.replace("text-xl", "text-3xl tracking-tight")}`}>
             {mode === "update" ? "Update Volunteer" : "Add Volunteer"}
             </h2>
-          <p className="mt-2 max-w-2xl text-sm leading-7 text-[#6d554a]">
+          <p className={`max-w-2xl ${internalBodyCopyClassName}`}>
             Register volunteers in structured sections so onboarding,
             availability, and outreach coordination stay easy to manage from
             one admin panel.
@@ -450,62 +439,14 @@ export default function VolunteerRegistrationForm({
             title="Address Information"
             description="Collect the volunteer's full address for field coordination and records."
           />
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid gap-5">
             <Field
-              label="House / Flat Number"
-              name="houseFlatNumber"
-              value={formData.houseFlatNumber}
+              label="Full Address"
+              name="fullAddress"
+              value={formData.fullAddress}
               onChange={handleChange}
-              placeholder="Flat 7B / H.No 14"
-            />
-            <Field
-              label="Street / Area / Locality"
-              name="streetAreaLocality"
-              value={formData.streetAreaLocality}
-              onChange={handleChange}
-              placeholder="Shivaji Nagar"
-            />
-            <Field
-              label="Landmark (Optional)"
-              name="landmark"
-              value={formData.landmark}
-              onChange={handleChange}
-              placeholder="Near market yard"
-            />
-            <Field
-              label="Village / Town / City"
-              name="villageTownCity"
-              value={formData.villageTownCity}
-              onChange={handleChange}
-              placeholder="Pune"
-            />
-            <Field
-              label="District"
-              name="district"
-              value={formData.district}
-              onChange={handleChange}
-              placeholder="Pune"
-            />
-            <Field
-              label="State"
-              name="state"
-              value={formData.state}
-              onChange={handleChange}
-              placeholder="Maharashtra"
-            />
-            <Field
-              label="PIN Code"
-              name="pinCode"
-              value={formData.pinCode}
-              onChange={handleChange}
-              placeholder="411001"
-            />
-            <Field
-              label="Country"
-              name="country"
-              value={formData.country}
-              onChange={handleChange}
-              placeholder="India"
+              placeholder="Flat 7B, Shivaji Nagar, Pune, Maharashtra 411001, India"
+              as="textarea"
             />
           </div>
         </section>
@@ -588,7 +529,7 @@ export default function VolunteerRegistrationForm({
           <div className="space-y-5">
             <div>
               <span className="mb-3 block text-xs font-semibold uppercase tracking-[0.22em] text-[#8f6b5c]">
-                Areas of Interest
+                Areas of Interest <span className="required-indicator">*</span>
               </span>
               <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
                 {interestOptions.map((item) => (
@@ -632,7 +573,7 @@ export default function VolunteerRegistrationForm({
           <div className="space-y-5">
             <div>
               <span className="mb-3 block text-xs font-semibold uppercase tracking-[0.22em] text-[#8f6b5c]">
-                Available Days
+                Available Days <span className="required-indicator">*</span>
               </span>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
                 {dayOptions.map((item) => (
@@ -806,14 +747,14 @@ export default function VolunteerRegistrationForm({
               setAreasOfInterest([]);
               setAvailableDays([]);
             }}
-            className="rounded-full border border-[#e4d5ca] bg-white px-5 py-3 text-sm font-semibold text-[#5e483f] transition hover:bg-[#faf5f1]"
+            className={internalSecondaryButtonClassName}
           >
             Reset form
           </button>
           <button
             type="submit"
             disabled={isPending}
-            className="rounded-full bg-[#7a1418] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#8e2023] disabled:opacity-60"
+            className={internalPrimaryButtonClassName}
           >
             {isPending
               ? mode === "update"

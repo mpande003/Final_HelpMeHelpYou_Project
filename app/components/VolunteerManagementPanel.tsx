@@ -45,19 +45,6 @@ function VolunteerDetail({
 }: {
   volunteer: Volunteer;
 }) {
-  const address = [
-    volunteer.houseFlatNumber,
-    volunteer.streetAreaLocality,
-    volunteer.landmark,
-    volunteer.villageTownCity,
-    volunteer.district,
-    volunteer.state,
-    volunteer.pinCode,
-    volunteer.country,
-  ]
-    .filter(Boolean)
-    .join(", ");
-
   return (
     <div className="grid gap-4 md:grid-cols-2">
       {[
@@ -69,7 +56,7 @@ function VolunteerDetail({
             ? `${volunteer.emergencyContactName} (${volunteer.emergencyContactPhone || "No phone"})`
             : "Not provided",
         ],
-        ["Address", address || "Not provided"],
+        ["Address", volunteer.fullAddress || "Not provided"],
         [
           "Identity",
           volunteer.idType
@@ -180,8 +167,8 @@ export default function VolunteerManagementPanel({
               }}
               className={`rounded-full px-5 py-3 text-sm font-semibold transition ${
                 tab === "view"
-                  ? "bg-[#7a1418] text-white"
-                  : "border border-[#ead8cb] bg-white text-[#5d463c]"
+                  ? "bg-[#fa5c5c] text-white shadow-[0_10px_24px_rgba(250,92,92,0.24)]"
+                  : "border border-[#fec288] bg-white text-[#7a5a4d] hover:bg-[#fff7cf]"
               }`}
             >
               View Volunteers
@@ -194,8 +181,8 @@ export default function VolunteerManagementPanel({
               }}
               className={`rounded-full px-5 py-3 text-sm font-semibold transition ${
                 tab === "add"
-                  ? "bg-[#7a1418] text-white"
-                  : "border border-[#ead8cb] bg-white text-[#5d463c]"
+                  ? "bg-[#fa5c5c] text-white shadow-[0_10px_24px_rgba(250,92,92,0.24)]"
+                  : "border border-[#fec288] bg-white text-[#7a5a4d] hover:bg-[#fff7cf]"
               }`}
             >
               Add Volunteer
@@ -290,8 +277,8 @@ export default function VolunteerManagementPanel({
                           <span
                             className={`rounded-full px-3 py-1 text-xs font-semibold ${
                               volunteer.approvalStatus === "approved"
-                                ? "bg-[#eef8f0] text-[#2f7444]"
-                                : "bg-[#fff4e8] text-[#9b5c1c]"
+                                ? "bg-[#fff7cf] text-[#fd8a6b]"
+                                : "bg-[#fff0b8] text-[#fa5c5c]"
                             }`}
                           >
                             {volunteer.approvalStatus}
