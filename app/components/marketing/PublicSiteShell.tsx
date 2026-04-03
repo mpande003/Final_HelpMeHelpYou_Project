@@ -6,7 +6,7 @@ import { useState } from "react";
 import type { ReactNode } from "react";
 
 type PublicSiteShellProps = {
-  activePath: "/" | "/about" | "/contact" | "/donate" | "/impact" | "/volunteer";
+  activePath: "/" | "/about" | "/contact" | "/donate" | "/impact" | "/volunteer" | "/verify";
   children: ReactNode;
 };
 

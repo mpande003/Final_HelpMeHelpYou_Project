@@ -21,6 +21,7 @@
     "nodemailer": "^7.0.13",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-draggable": "^4.5.0",
     "react-leaflet": "^5.0.0"
   },
   "devDependencies": {

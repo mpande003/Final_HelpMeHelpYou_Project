@@ -16,8 +16,22 @@ export type CertificateTemplate = {
   name: string;
   target_audience: "volunteer" | "beneficiary" | "blood_donor" | "all";
   image_url: string;
-  fields: CertificateField[];
+  fields?: CertificateField[];
+  signature_url?: string;
+  signature_x?: number;
+  signature_y?: number;
   created_at: string;
+  updated_at: string;
+};
+
+export type CertificateIssuance = {
+  id: string;
+  template_id: string;
+  recipient_id: string;
+  recipient_name: string;
+  event_name: string;
+  token_id: string;
+  issued_at: string;
 };
 
 export async function listTemplates() {
@@ -35,15 +49,34 @@ export async function listTemplates() {
   return data as CertificateTemplate[];
 }
 
-export async function createTemplate(input: Omit<CertificateTemplate, "id" | "created_at">) {
+export async function createTemplate(input: Omit<CertificateTemplate, "id" | "created_at" | "updated_at">) {
   const { data, error } = await supabase.from("certificate_templates").insert([
     {
       name: input.name,
       target_audience: input.target_audience,
       image_url: input.image_url,
-      fields: input.fields,
+      fields: input.fields || [],
+      signature_url: input.signature_url,
+      signature_x: input.signature_x,
+      signature_y: input.signature_y,
     },
   ]).select().single();
+
+  if (error) throw error;
+  return data as CertificateTemplate;
+}
+
+export async function updateTemplate(id: string, input: Partial<Omit<CertificateTemplate, "id" | "created_at">>) {
+  const { data, error } = await supabase
+    .from("certificate_templates")
+    .update({
+      ...input,
+      fields: input.fields || [],
+      updated_at: new Date().toISOString()
+    })
+    .eq("id", id)
+    .select()
+    .single();
 
   if (error) throw error;
   return data as CertificateTemplate;
@@ -52,6 +85,38 @@ export async function createTemplate(input: Omit<CertificateTemplate, "id" | "cr
 export async function deleteTemplate(id: string) {
   const { error } = await supabase.from("certificate_templates").delete().eq("id", id);
   if (error) throw error;
+}
+
+export async function listIssuances() {
+  const { data, error } = await supabase
+    .from("certificate_issuances")
+    .select("*")
+    .order("issued_at", { ascending: false });
+
+  if (error) throw error;
+  return data as CertificateIssuance[];
+}
+
+export async function recordIssuance(input: Omit<CertificateIssuance, "id" | "issued_at">) {
+  const { data, error } = await supabase
+    .from("certificate_issuances")
+    .insert([input])
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data as CertificateIssuance;
+}
+
+export function generateTokenId() {
+  const prefix = "CEP";
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // Removed ambiguous O, 0, I, 1
+  let token = "";
+  for (let i = 0; i < 8; i++) {
+    if (i === 4) token += "-";
+    token += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return `${prefix}-${token}`;
 }
 
 export async function uploadTemplateImage(file: File) {
