@@ -7,7 +7,22 @@ export async function listBeneficiaries() {
     .order("created_at", { ascending: false });
 
   if (error) throw error;
-  return data;
+  
+  return data.map((row: any) => ({
+    id: row.id,
+    eventId: row.event_id,
+    eventName: row.event_name,
+    fullName: row.full_name,
+    phoneNumber: row.phone_number,
+    age: row.age,
+    gender: row.gender,
+    supportType: row.support_type,
+    location: row.location,
+    notes: row.notes,
+    createdBy: row.created_by,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  }));
 }
 
 export async function createBeneficiary(input: any) {

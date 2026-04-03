@@ -35,7 +35,7 @@ export async function persistVolunteerRegistration(input: {
   } catch (error: any) {
     console.error("Failed to insert volunteer:", error);
     return {
-      error: "Failed to persist volunteer registration. Please try again.",
+      error: "DB Error: " + (error.message || "Unknown error"),
       success: "",
     };
   }

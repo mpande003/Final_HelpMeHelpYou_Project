@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import {
   normalizePhoneNumber,
   parseVolunteerFormData,
-} from "../lib/volunteer-validation.ts";
+} from "../lib/volunteer-validation";
 
 function buildBaseFormData() {
   const formData = new FormData();

@@ -20,6 +20,7 @@ import {
   internalPanelEyebrowClassName,
   internalPrimaryButtonClassName,
   internalSecondaryButtonClassName,
+  internalDangerButtonClassName,
   internalTableHeaderClassName,
   internalTableRowClassName,
 } from "./internalTheme";
@@ -312,7 +313,7 @@ export default function BeneficiariesPanel({
                           />
                           <button
                             type="submit"
-                            className="rounded-full bg-[#fff0f0] px-3 py-1.5 text-xs font-semibold text-[#a12628]"
+                            className={`${internalDangerButtonClassName} px-3 py-1.5 text-xs`}
                           >
                             Delete
                           </button>

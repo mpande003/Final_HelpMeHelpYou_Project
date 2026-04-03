@@ -42,6 +42,9 @@ export const internalLabelClassName =
 export const internalPrimaryButtonClassName =
   "rounded-full bg-[var(--red)] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[var(--red-dark)] disabled:opacity-60 shadow-[0_4px_18px_rgba(189,17,74,0.32)] hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0";
 
+export const internalDangerButtonClassName =
+  "rounded-full bg-[#fff0f0] px-5 py-3 text-sm font-semibold text-[#a12628] transition hover:bg-[#ffe0e0] hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 shadow-[0_4px_18px_rgba(161,38,40,0.15)]";
+
 export const internalSecondaryButtonClassName =
   "rounded-full bg-[var(--yellow)] px-5 py-3 text-sm font-semibold text-gray-900 transition hover:bg-[var(--yellow-dark)] hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 shadow-[0_4px_18px_rgba(250,226,81,0.32)]";
 

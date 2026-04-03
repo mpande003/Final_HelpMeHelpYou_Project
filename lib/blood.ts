@@ -4,8 +4,22 @@ import supabase from "./db";
 export async function createBloodDonor(input: any) {
   const { data, error } = await supabase.from("blood_donors").insert([
     {
-      ...input,
+      event_id: input.eventId,
+      event_name: input.eventName,
+      donor_name: input.donorName,
+      donor_phone: input.donorPhone,
+      blood_group: input.bloodGroup,
+      age: input.age,
+      gender: input.gender,
+      address: input.address,
+      donor_id_number: input.donorIdNumber,
+      blood_bank_name: input.bloodBankName,
+      blood_bank_contact: input.bloodBankContact,
+      donation_date: input.donationDate,
+      units_donated: input.unitsDonated,
       relative_support_eligible: input.relativeSupportEligible ? 1 : 0,
+      notes: input.notes,
+      created_by: input.createdBy,
     },
   ]);
 
@@ -21,7 +35,27 @@ export async function listBloodDonors() {
     .order("created_at", { ascending: false });
 
   if (error) throw error;
-  return data;
+  return data.map((row: any) => ({
+    id: row.id,
+    eventId: row.event_id,
+    eventName: row.event_name,
+    donorName: row.donor_name,
+    donorPhone: row.donor_phone,
+    bloodGroup: row.blood_group,
+    age: row.age,
+    gender: row.gender,
+    address: row.address,
+    donorIdNumber: row.donor_id_number,
+    bloodBankName: row.blood_bank_name,
+    bloodBankContact: row.blood_bank_contact,
+    donationDate: row.donation_date,
+    unitsDonated: row.units_donated,
+    relativeSupportEligible: Boolean(row.relative_support_eligible),
+    notes: row.notes,
+    createdBy: row.created_by,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  }));
 }
 
 export async function updateBloodDonor(input: any) {
@@ -29,7 +63,21 @@ export async function updateBloodDonor(input: any) {
   const { error } = await supabase
     .from("blood_donors")
     .update({
-      ...updates,
+      event_id: updates.eventId,
+      event_name: updates.eventName,
+      donor_name: updates.donorName,
+      donor_phone: updates.donorPhone,
+      blood_group: updates.bloodGroup,
+      age: updates.age,
+      gender: updates.gender,
+      address: updates.address,
+      donor_id_number: updates.donorIdNumber,
+      blood_bank_name: updates.bloodBankName,
+      blood_bank_contact: updates.bloodBankContact,
+      donation_date: updates.donationDate,
+      units_donated: updates.unitsDonated,
+      relative_support_eligible: updates.relativeSupportEligible ? 1 : 0,
+      notes: updates.notes,
       updated_at: new Date().toISOString(),
     })
     .eq("id", id);
@@ -55,7 +103,20 @@ export async function deleteBloodDonor(id: number) {
 export async function createBloodRequest(input: any) {
   const { data, error } = await supabase
     .from("blood_requests")
-    .insert([input]);
+    .insert([{
+      donor_id: input.donorId,
+      donor_name: input.donorName,
+      requester_name: input.requesterName,
+      requester_phone: input.requesterPhone,
+      patient_name: input.patientName,
+      relation_to_donor: input.relationToDonor,
+      hospital_name: input.hospitalName,
+      blood_group_needed: input.bloodGroupNeeded,
+      units_required: input.unitsRequired,
+      urgency: input.urgency,
+      notes: input.notes,
+      created_by: input.createdBy,
+    }]);
 
   if (error) throw error;
   return data;
@@ -69,7 +130,29 @@ export async function listBloodRequests() {
     .order("created_at", { ascending: false });
 
   if (error) throw error;
-  return data;
+  return data.map((row: any) => ({
+    id: row.id,
+    donorId: row.donor_id,
+    donorName: row.donor_name,
+    requesterName: row.requester_name,
+    requesterPhone: row.requester_phone,
+    patientName: row.patient_name,
+    relationToDonor: row.relation_to_donor,
+    hospitalName: row.hospital_name,
+    bloodGroupNeeded: row.blood_group_needed,
+    unitsRequired: row.units_required,
+    urgency: row.urgency,
+    verificationStatus: row.verification_status,
+    verifiedBy: row.verified_by,
+    verifiedAt: row.verified_at,
+    fulfillmentStatus: row.fulfillment_status,
+    fulfilledBy: row.fulfilled_by,
+    fulfilledAt: row.fulfilled_at,
+    notes: row.notes,
+    createdBy: row.created_by,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  }));
 }
 
 export async function updateBloodRequest(input: any) {
@@ -77,7 +160,19 @@ export async function updateBloodRequest(input: any) {
   const { error } = await supabase
     .from("blood_requests")
     .update({
-      ...updates,
+      donor_id: updates.donorId,
+      donor_name: updates.donorName,
+      requester_name: updates.requesterName,
+      requester_phone: updates.requesterPhone,
+      patient_name: updates.patientName,
+      relation_to_donor: updates.relationToDonor,
+      hospital_name: updates.hospitalName,
+      blood_group_needed: updates.bloodGroupNeeded,
+      units_required: updates.unitsRequired,
+      urgency: updates.urgency,
+      verification_status: updates.verificationStatus,
+      fulfillment_status: updates.fulfillmentStatus,
+      notes: updates.notes,
       updated_at: new Date().toISOString(),
     })
     .eq("id", id);

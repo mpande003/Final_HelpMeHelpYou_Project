@@ -25,6 +25,7 @@ import {
   internalSectionClassName,
   internalSectionDescriptionClassName,
   internalSectionTitleClassName,
+  internalDangerButtonClassName,
 } from "./internalTheme";
 
 type BloodDonationPanelProps = {
