@@ -55,7 +55,45 @@ export async function listEvents() {
     .order("start_date", { ascending: false });
 
   if (error) throw error;
-  return data;
+  
+  // Transform snake_case columns back to camelCase expected by the UI
+  return data.map((row: any) => ({
+    id: row.id,
+    eventName: row.event_name,
+    eventType: row.event_type,
+    description: row.description,
+    startDate: row.start_date,
+    endDate: row.end_date,
+    startTime: row.start_time,
+    endTime: row.end_time,
+    fullName: row.full_name,
+    houseNumber: row.house_number,
+    buildingStreetArea: row.building_street_area,
+    landmark: row.landmark,
+    villageTownCity: row.village_town_city,
+    postOffice: row.post_office,
+    tehsilTaluka: row.tehsil_taluka,
+    district: row.district,
+    state: row.state,
+    pinCode: row.pin_code,
+    country: row.country,
+    mapLink: row.map_link,
+    partnerOrganizations: row.partner_organizations,
+    sponsorContactName: row.sponsor_contact_name,
+    sponsorPhone: row.sponsor_phone,
+    sponsorEmail: row.sponsor_email,
+    expectedParticipants: row.expected_participants,
+    actualParticipants: row.actual_participants,
+    beneficiaries: row.beneficiaries,
+    estimatedBudget: row.estimated_budget,
+    actualExpenses: row.actual_expenses,
+    sponsor: row.sponsor,
+    status: row.status,
+    markerStatus: row.marker_status,
+    latitude: row.latitude,
+    longitude: row.longitude,
+    createdBy: row.created_by,
+  }));
 }
 
 // ✅ UPDATE
