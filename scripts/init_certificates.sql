@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS public.certificate_templates (
   signature_url text,
   signature_x float8 DEFAULT 85,
   signature_y float8 DEFAULT 85,
+  event_id bigint, -- Numeric ID for event association
   created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL,
   updated_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );

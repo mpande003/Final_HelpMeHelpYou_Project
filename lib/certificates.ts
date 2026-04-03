@@ -7,6 +7,7 @@ export type CertificateField = {
   y: number;
   fontSize: number;
   fontColor: string;
+  fontFace?: string;
   type?: "standard" | "custom";
   value?: string;
 };
@@ -20,6 +21,7 @@ export type CertificateTemplate = {
   signature_url?: string;
   signature_x?: number;
   signature_y?: number;
+  event_id?: number | null;
   created_at: string;
   updated_at: string;
 };
@@ -59,6 +61,7 @@ export async function createTemplate(input: Omit<CertificateTemplate, "id" | "cr
       signature_url: input.signature_url,
       signature_x: input.signature_x,
       signature_y: input.signature_y,
+      event_id: input.event_id,
     },
   ]).select().single();
 
@@ -72,6 +75,7 @@ export async function updateTemplate(id: string, input: Partial<Omit<Certificate
     .update({
       ...input,
       fields: input.fields || [],
+      event_id: input.event_id,
       updated_at: new Date().toISOString()
     })
     .eq("id", id)
