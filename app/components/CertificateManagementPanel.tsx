@@ -251,60 +251,66 @@ export default function CertificateManagementPanel({
     const pdf = new jsPDF("landscape", "mm", "a4");
     const container = pdfPrintRef.current;
     
-    for (let i = 0; i < target.length; i++) {
-      const person = target[i];
-      const tokenId = generateTokenId();
-      await recordIssuance({ template_id: selectedTemplate.id, recipient_id: person.id, recipient_name: person.name, event_name: person.eventName || "CEP Event", token_id: tokenId });
+    try {
+      for (let i = 0; i < target.length; i++) {
+        const person = target[i];
+        const tokenId = generateTokenId();
+        await recordIssuance({ template_id: selectedTemplate.id, recipient_id: person.id, recipient_name: person.name, event_name: person.eventName || "CEP Event", token_id: tokenId });
 
-      const overlay = container.querySelector("#text-overlay") as HTMLDivElement;
-      overlay.innerHTML = "";
-      container.querySelectorAll(".sig-print").forEach(s => s.remove());
+        const overlay = container.querySelector("#text-overlay") as HTMLDivElement;
+        overlay.innerHTML = "";
+        container.querySelectorAll(".sig-print").forEach(s => s.remove());
 
-      fields.forEach(f => {
-        const d = document.createElement("div");
-        d.style.position = "absolute";
-        d.style.left = `${f.x}%`;
-        d.style.top = `${f.y}%`;
-        d.style.transform = "translate(-50%, -50%)";
-        d.style.fontSize = `${f.fontSize * 4}px`; // High res
-        d.style.color = f.fontColor;
-        d.style.fontFamily = f.fontFace || "sans-serif";
-        d.style.fontWeight = "bold";
-        d.style.whiteSpace = "nowrap";
+        fields.forEach(f => {
+          const d = document.createElement("div");
+          d.style.position = "absolute";
+          d.style.left = `${f.x}%`;
+          d.style.top = `${f.y}%`;
+          d.style.transform = "translate(-50%, -50%)";
+          d.style.fontSize = `${f.fontSize * 4}px`; // High res
+          d.style.color = f.fontColor;
+          d.style.fontFamily = f.fontFace || "sans-serif";
+          d.style.fontWeight = "bold";
+          d.style.whiteSpace = "nowrap";
 
-        let text = f.value;
-        if (f.type === "standard") {
-           if (text === "[Name]") text = person.name;
-           else if (text === "[Event]") text = person.eventName || "CEP Initiative";
-           else if (text === "[Date]") text = new Date().toLocaleDateString();
-           else if (text === "[Role]") text = person.subtext;
-           else if (text === "[Token]") text = tokenId;
-        }
-        d.innerText = text || "";
-        overlay.appendChild(d);
-      });
+          let text = f.value;
+          if (f.type === "standard") {
+             if (text === "[Name]") text = person.name;
+             else if (text === "[Event]") text = person.eventName || "CEP Initiative";
+             else if (text === "[Date]") text = new Date().toLocaleDateString();
+             else if (text === "[Role]") text = person.subtext;
+             else if (text === "[Token]") text = tokenId;
+          }
+          d.innerText = text || "";
+          overlay.appendChild(d);
+        });
 
-      signatures.forEach(s => {
-        const img = document.createElement("img");
-        img.src = s.url;
-        img.className = "sig-print";
-        img.style.position = "absolute";
-        img.style.left = `${s.x}%`;
-        img.style.top = `${s.y}%`;
-        img.style.height = "15%";
-        img.style.transform = "translate(-50%, -50%)";
-        img.crossOrigin = "anonymous";
-        container.appendChild(img);
-      });
+        signatures.forEach(s => {
+          const img = document.createElement("img");
+          img.src = s.url;
+          img.className = "sig-print";
+          img.style.position = "absolute";
+          img.style.left = `${s.x}%`;
+          img.style.top = `${s.y}%`;
+          img.style.height = "15%";
+          img.style.transform = "translate(-50%, -50%)";
+          img.crossOrigin = "anonymous";
+          container.appendChild(img);
+        });
 
-      await new Promise(r => setTimeout(r, 150));
-      const canvas = await html2canvas(container, { scale: 2, useCORS: true });
-      const imgData = canvas.toDataURL("image/jpeg", 0.95);
-      if (i > 0) pdf.addPage();
-      pdf.addImage(imgData, "JPEG", 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
+        await new Promise(r => setTimeout(r, 150));
+        const canvas = await html2canvas(container, { scale: 2, useCORS: true });
+        const imgData = canvas.toDataURL("image/jpeg", 0.95);
+        if (i > 0) pdf.addPage();
+        pdf.addImage(imgData, "JPEG", 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
+      }
+      pdf.save(`CEP_Certificates_${Date.now()}.pdf`);
+    } catch (e: any) {
+      alert(`Generation failed: ${e.message || JSON.stringify(e)}`);
+      console.error(e);
+    } finally {
+      setIsGenerating(false);
     }
-    pdf.save(`CEP_Certificates_${Date.now()}.pdf`);
-    setIsGenerating(false);
   };
 
   return (
@@ -365,9 +371,9 @@ export default function CertificateManagementPanel({
                         <p className="font-bold text-[#4b302a] text-sm">{t.name}</p>
                         <p className="text-[10px] text-gray-400 uppercase font-black">{t.target_audience}</p>
                      </div>
-                     <div className="flex gap-2">
-                        <button onClick={() => handleEditTemplate(t)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg">Edit</button>
-                        <button onClick={() => { if(confirm("Delete?")) deleteTemplate(t.id).then(() => setTemplates(p => p.filter(x => x.id !== t.id))) }} className="p-2 text-red-600 hover:bg-red-50 rounded-lg">Del</button>
+                     <div className="flex gap-2 text-xs font-bold">
+                        <button onClick={() => { setSelectedTemplateId(t.id); setView("generate"); }} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg">Use</button>
+                        <button onClick={() => { if(confirm("Delete?")) deleteTemplate(t.id).then(() => setTemplates(p => p.filter(x => x.id !== t.id))).catch(e => alert(`Delete error: ${e.message || JSON.stringify(e)}`)) }} className="p-2 text-red-600 hover:bg-red-50 rounded-lg">Del</button>
                      </div>
                    </div>
                  ))}
