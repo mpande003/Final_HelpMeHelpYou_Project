@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, type ChangeEvent, useState } from "react";
+import MapLinkExtractor from "./MapLinkExtractor";
 
 import { createEventAction } from "../dashboard/event-actions";
 import {
@@ -501,8 +502,8 @@ export default function AddEventForm() {
 
           <section className={sectionClassName}>
             <SectionHeader
-              title="Financial and Map Data"
-              description="Keep sponsor, budget, and location coordinates in one operational record."
+              title="Financial Data"
+              description="Keep sponsor and budget information in one operational record."
             />
             <div className="grid gap-5 md:grid-cols-2">
               <Field
@@ -525,7 +526,29 @@ export default function AddEventForm() {
                 placeholder="Corporate donor or partner"
                 value={formData.sponsor}
                 onChange={handleChange}
+                className="md:col-span-2"
               />
+            </div>
+          </section>
+
+          <section className={`${sectionClassName} flex flex-col gap-5`}>
+            <SectionHeader
+              title="Map Data"
+              description="Plot this event on the interactive impact map."
+            />
+            
+            <MapLinkExtractor 
+              onCoordinatesExtracted={(lat, lng, rawLink) => {
+                setFormData(prev => ({
+                  ...prev,
+                  latitude: lat,
+                  longitude: lng,
+                  mapLink: prev.mapLink || rawLink, // Only set mapLink if empty natively
+                }));
+              }} 
+            />
+
+            <div className="grid gap-5 md:grid-cols-2">
               <Field
                 label="Latitude"
                 name="latitude"

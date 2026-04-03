@@ -1,8 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
-
 import bcrypt from "bcryptjs";
-import Database from "better-sqlite3";
+import { createClient } from "@supabase/supabase-js";
 
 function loadEnvFile(filePath) {
   if (!fs.existsSync(filePath)) {
@@ -28,55 +27,68 @@ function loadEnvFile(filePath) {
   }
 }
 
+// Ensure .env and .env.local are loaded so Supabase variables are available
 loadEnvFile(path.join(process.cwd(), ".env"));
 loadEnvFile(path.join(process.cwd(), ".env.local"));
 
-const databasePath =
-  process.env.DATABASE_PATH || path.join(process.cwd(), "data", "cep.sqlite");
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+// Use service role key if available, otherwise fallback to anon key
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseKey) {
+  console.error("Missing Supabase credentials. Make sure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set in your .env or .env.local file.");
+  process.exit(1);
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
 const username = process.env.SEED_ADMIN_USERNAME || "admin";
 const password = process.env.SEED_ADMIN_PASSWORD || "admin123@";
 const role = process.env.SEED_ADMIN_ROLE || "admin";
 
-fs.mkdirSync(path.dirname(databasePath), { recursive: true });
+async function seedAdmin() {
+  const passwordHash = bcrypt.hashSync(password, 10);
+  
+  // Check if user already exists
+  const { data: existingUser } = await supabase
+    .from("users")
+    .select("id")
+    .eq("username", username)
+    .maybeSingle();
 
-const db = new Database(databasePath);
-
-db.exec(`
-  CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT NOT NULL UNIQUE,
-    password_hash TEXT NOT NULL,
-    role TEXT NOT NULL DEFAULT 'admin',
-    status TEXT NOT NULL DEFAULT 'active',
-    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-  );
-`);
-
-const passwordHash = bcrypt.hashSync(password, 10);
-const existingUser = db
-  .prepare("SELECT id FROM users WHERE username = ?")
-  .get(username);
-
-if (existingUser) {
-  db.prepare(
-    `
-      UPDATE users
-      SET password_hash = ?,
-          role = ?,
-          updated_at = CURRENT_TIMESTAMP
-      WHERE username = ?
-    `,
-  ).run(passwordHash, role, username);
-  console.log(`Updated user "${username}" in ${databasePath}`);
-} else {
-  db.prepare(
-    `
-      INSERT INTO users (username, password_hash, role)
-      VALUES (?, ?, ?)
-    `,
-  ).run(username, passwordHash, role);
-  console.log(`Created user "${username}" in ${databasePath}`);
+  if (existingUser) {
+    const { error: updateError } = await supabase
+      .from("users")
+      .update({
+        password_hash: passwordHash,
+        role: role,
+        updated_at: new Date().toISOString()
+      })
+      .eq("username", username);
+      
+    if (updateError) {
+      console.error(`Failed to update user "${username}":`, updateError);
+    } else {
+      console.log(`Updated user "${username}" in Supabase db.`);
+    }
+  } else {
+    const { error: insertError } = await supabase
+      .from("users")
+      .insert([
+        {
+          username: username,
+          password_hash: passwordHash,
+          role: role,
+          status: "active"
+        }
+      ]);
+      
+    if (insertError) {
+      console.error(`Failed to create user "${username}":`, insertError);
+    } else {
+      console.log(`Created user "${username}" in Supabase db.`);
+    }
+  }
 }
 
-db.close();
+seedAdmin();

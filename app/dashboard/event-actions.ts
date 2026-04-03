@@ -109,12 +109,12 @@ export async function createEventAction(
     };
   }
 
-  createEvent(payload);
+  await createEvent(payload);
 
   const resolvedEventType =
     eventType === "Other" ? customEventType || "Other" : eventType;
 
-  createAuditLog({
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "create_event",
     targetUsername: eventName,
@@ -158,17 +158,17 @@ export async function updateEventAction(
     };
   }
 
-  const existingEvent = listEvents().find((event) => event.id === eventId);
+  const existingEvent = (await listEvents()).find((event) => event.id === eventId);
   if (!existingEvent) {
     return { ...initialState, error: "Selected event not found." };
   }
 
-  updateEvent({
+  await updateEvent({
     id: eventId,
     ...payload,
   });
 
-  createAuditLog({
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "update_event",
     targetUsername: payload.eventName,
@@ -198,7 +198,7 @@ export async function removeEventMarkerAction(
     };
   }
 
-  const event = listEvents().find((item) => item.id === eventId);
+  const event = (await listEvents()).find((item) => item.id === eventId);
   if (!event) {
     return {
       ...initialState,
@@ -206,8 +206,8 @@ export async function removeEventMarkerAction(
     };
   }
 
-  updateEventMarkerStatus(eventId, "removed");
-  createAuditLog({
+  await updateEventMarkerStatus(eventId, "removed");
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "remove_event_marker",
     targetUsername: event.eventName,
@@ -236,7 +236,7 @@ export async function readdEventMarkerAction(
     };
   }
 
-  const event = listEvents().find((item) => item.id === eventId);
+  const event = (await listEvents()).find((item) => item.id === eventId);
   if (!event) {
     return {
       ...initialState,
@@ -244,8 +244,8 @@ export async function readdEventMarkerAction(
     };
   }
 
-  updateEventMarkerStatus(eventId, "active");
-  createAuditLog({
+  await updateEventMarkerStatus(eventId, "active");
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "readd_event_marker",
     targetUsername: event.eventName,
@@ -271,14 +271,14 @@ export async function deleteEventAction(
     return { ...initialState, error: "Select a valid event to delete." };
   }
 
-  const event = listEvents().find((item) => item.id === eventId);
+  const event = (await listEvents()).find((item) => item.id === eventId);
   if (!event) {
     return { ...initialState, error: "Selected event not found." };
   }
 
-  deleteEvent(eventId);
+  await deleteEvent(eventId);
 
-  createAuditLog({
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "delete_event",
     targetUsername: event.eventName,

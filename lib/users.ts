@@ -1,4 +1,4 @@
-import { getDb } from "./db";
+import supabase from "./db";
 
 export type AppUser = {
   id: number;
@@ -19,58 +19,57 @@ export type AuditLogEntry = {
   createdAt: string;
 };
 
-type UserRow = {
-  id: number;
-  username: string;
-  password_hash: string;
-  role: string;
-  status: string;
-};
+// ✅ Get user by username
+export async function getUserByUsername(username: string): Promise<AppUser | null> {
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("username", username.toLowerCase())
+    .single();
 
-export function getUserByUsername(username: string): AppUser | null {
-  const db = getDb();
-  const row = db
-    .prepare(
-      "SELECT id, username, password_hash, role, status FROM users WHERE username = ?",
-    )
-    .get(username) as UserRow | undefined;
+  console.log("QUERY RESULT:", data);
+  console.log("QUERY ERROR:", error);
 
-  if (!row) {
-    return null;
-  }
-
+  if (error || !data) return null;
   return {
-    id: row.id,
-    username: row.username,
-    passwordHash: row.password_hash,
-    role: row.role,
-    status: row.status,
+    id: data.id,
+    username: data.username,
+    passwordHash: data.password_hash,
+    role: data.role,
+    status: data.status,
+    createdAt: data.created_at,
+    updatedAt: data.updated_at,
   };
 }
 
-type UserListRow = {
-  id: number;
-  username: string;
-  role: string;
-  status: string;
-  created_at: string;
-  updated_at: string;
-};
+// export async function getUserByUsername(username: string): Promise<AppUser | null> {
+//   const { data, error } = await supabase
+//     .from("users")
+//     .select("id, username, password_hash, role, status")
+//     .eq("username", username)
+//     .single();
 
-export function listUsers() {
-  const db = getDb();
-  const rows = db
-    .prepare(
-      `
-        SELECT id, username, role, created_at, updated_at
-        , status
-        FROM users
-        ORDER BY username ASC
-      `,
-    )
-    .all() as UserListRow[];
+//   if (error || !data) return null;
 
-  return rows.map((row) => ({
+//   return {
+//     id: data.id,
+//     username: data.username,
+//     passwordHash: data.password_hash,
+//     role: data.role,
+//     status: data.status,
+//   };
+// }
+
+// ✅ List users
+export async function listUsers() {
+  const { data, error } = await supabase
+    .from("users")
+    .select("id, username, role, status, created_at, updated_at")
+    .order("username", { ascending: true });
+
+  if (error) throw error;
+
+  return data.map((row) => ({
     id: row.id,
     username: row.username,
     role: row.role,
@@ -80,111 +79,101 @@ export function listUsers() {
   }));
 }
 
-export function createUser(input: {
+// ✅ Create user
+export async function createUser(input: {
   username: string;
   passwordHash: string;
   role: string;
 }) {
-  const db = getDb();
+  const { data, error } = await supabase.from("users").insert([
+    {
+      username: input.username,
+      password_hash: input.passwordHash,
+      role: input.role,
+      status: "active",
+    },
+  ]);
 
-  return db
-    .prepare(
-      `
-        INSERT INTO users (username, password_hash, role, status)
-        VALUES (?, ?, ?, 'active')
-      `,
-    )
-    .run(input.username, input.passwordHash, input.role);
+  if (error) throw error;
+  return data;
 }
 
-export function resetUserPassword(input: {
+// ✅ Reset password
+export async function resetUserPassword(input: {
   username: string;
   passwordHash: string;
 }) {
-  const db = getDb();
+  const { data, error } = await supabase
+    .from("users")
+    .update({
+      password_hash: input.passwordHash,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("username", input.username);
 
-  return db
-    .prepare(
-      `
-        UPDATE users
-        SET password_hash = ?,
-            updated_at = CURRENT_TIMESTAMP
-        WHERE username = ?
-      `,
-    )
-    .run(input.passwordHash, input.username);
+  if (error) throw error;
+  return data;
 }
 
-export function updateUserStatus(input: {
+// ✅ Update user status
+export async function updateUserStatus(input: {
   username: string;
   status: "active" | "inactive";
 }) {
-  const db = getDb();
+  const { data, error } = await supabase
+    .from("users")
+    .update({
+      status: input.status,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("username", input.username);
 
-  return db
-    .prepare(
-      `
-        UPDATE users
-        SET status = ?,
-            updated_at = CURRENT_TIMESTAMP
-        WHERE username = ?
-      `,
-    )
-    .run(input.status, input.username);
+  if (error) throw error;
+  return data;
 }
 
-export function deleteUser(username: string) {
-  const db = getDb();
+// ✅ Delete user
+export async function deleteUser(username: string) {
+  const { data, error } = await supabase
+    .from("users")
+    .delete()
+    .eq("username", username);
 
-  return db.prepare("DELETE FROM users WHERE username = ?").run(username);
+  if (error) throw error;
+  return data;
 }
 
-type AuditLogRow = {
-  id: number;
-  actor_username: string;
-  action: string;
-  target_username: string;
-  details: string | null;
-  created_at: string;
-};
-
-export function createAuditLog(input: {
+// ✅ Create audit log
+export async function createAuditLog(input: {
   actorUsername: string;
   action: string;
   targetUsername: string;
   details?: string;
 }) {
-  const db = getDb();
+  const { data, error } = await supabase.from("audit_logs").insert([
+    {
+      actor_username: input.actorUsername,
+      action: input.action,
+      target_username: input.targetUsername,
+      details: input.details ?? null,
+    },
+  ]);
 
-  return db
-    .prepare(
-      `
-        INSERT INTO audit_logs (actor_username, action, target_username, details)
-        VALUES (?, ?, ?, ?)
-      `,
-    )
-    .run(
-      input.actorUsername,
-      input.action,
-      input.targetUsername,
-      input.details ?? null,
-    );
+  if (error) throw error;
+  return data;
 }
 
-export function listAuditLogs(limit = 25): AuditLogEntry[] {
-  const db = getDb();
-  const rows = db
-    .prepare(
-      `
-        SELECT id, actor_username, action, target_username, details, created_at
-        FROM audit_logs
-        ORDER BY created_at DESC, id DESC
-        LIMIT ?
-      `,
-    )
-    .all(limit) as AuditLogRow[];
+// ✅ List audit logs
+export async function listAuditLogs(limit = 25): Promise<AuditLogEntry[]> {
+  const { data, error } = await supabase
+    .from("audit_logs")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(limit);
 
-  return rows.map((row) => ({
+  if (error) throw error;
+
+  return data.map((row) => ({
     id: row.id,
     actorUsername: row.actor_username,
     action: row.action,

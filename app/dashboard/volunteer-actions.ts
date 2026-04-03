@@ -53,7 +53,7 @@ export async function createVolunteerAction(
   const fullName = normalizeString(formData.get("fullName"));
   const phoneNumber = normalizeString(formData.get("phoneNumber"));
 
-  createAuditLog({
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "create_volunteer",
     targetUsername: fullName,
@@ -79,7 +79,7 @@ export async function updateVolunteerAction(
     return { ...initialState, error: "Select a valid volunteer to update." };
   }
 
-  const volunteer = listVolunteers().find((item) => item.id === volunteerId);
+  const volunteer = (await listVolunteers()).find((item) => item.id === volunteerId);
   if (!volunteer) {
     return { ...initialState, error: "Volunteer not found." };
   }
@@ -89,12 +89,12 @@ export async function updateVolunteerAction(
     return { ...initialState, error: parsed.error };
   }
 
-  updateVolunteer({
+  await updateVolunteer({
     id: volunteerId,
     ...parsed.input,
   });
 
-  createAuditLog({
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "update_volunteer",
     targetUsername: parsed.input.fullName,
@@ -116,13 +116,13 @@ export async function approveVolunteerAction(formData: FormData) {
     throw new Error("Invalid volunteer.");
   }
 
-  const volunteer = listVolunteers().find((item) => item.id === volunteerId);
+  const volunteer = (await listVolunteers()).find((item) => item.id === volunteerId);
   if (!volunteer) {
     throw new Error("Volunteer not found.");
   }
 
-  approveVolunteer(volunteerId, session.user.name ?? "unknown");
-  createAuditLog({
+  await approveVolunteer(volunteerId, session.user.name ?? "unknown");
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "approve_volunteer",
     targetUsername: volunteer.fullName,
@@ -138,13 +138,13 @@ export async function deleteVolunteerAction(formData: FormData) {
     throw new Error("Invalid volunteer.");
   }
 
-  const volunteer = listVolunteers().find((item) => item.id === volunteerId);
+  const volunteer = (await listVolunteers()).find((item) => item.id === volunteerId);
   if (!volunteer) {
     throw new Error("Volunteer not found.");
   }
 
-  deleteVolunteer(volunteerId);
-  createAuditLog({
+  await deleteVolunteer(volunteerId);
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "delete_volunteer",
     targetUsername: volunteer.fullName,
@@ -162,23 +162,23 @@ export async function assignVolunteerRoleAction(formData: FormData) {
     throw new Error("Volunteer, event, and role are required.");
   }
 
-  const volunteer = listVolunteers().find((item) => item.id === volunteerId);
+  const volunteer = (await listVolunteers()).find((item) => item.id === volunteerId);
   if (!volunteer) {
     throw new Error("Volunteer not found.");
   }
 
-  const event = listEvents().find((item) => item.id === eventId);
+  const event = (await listEvents()).find((item) => item.id === eventId);
   if (!event) {
     throw new Error("Event not found.");
   }
 
-  assignVolunteerRole({
+  await assignVolunteerRole({
     volunteerId,
     eventId,
     eventName: event.eventName,
     assignedRole,
   });
-  createAuditLog({
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "assign_volunteer_role",
     targetUsername: volunteer.fullName,

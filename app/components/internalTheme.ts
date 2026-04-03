@@ -1,57 +1,57 @@
 export const internalFormInputClassName =
-  "w-full rounded-2xl border border-[#fec288] bg-white px-4 py-3 text-sm text-[#4b302a] outline-none transition focus:border-[#fa5c5c] focus:ring-4 focus:ring-[#fa5c5c]/10";
+  "w-full rounded-2xl border border-[var(--border)] bg-[var(--bg)] px-4 py-3 text-sm text-[var(--text)] outline-none transition focus:border-[var(--red)] focus:ring-4 focus:ring-[var(--red-glow)]";
 
 export const internalFormInputSoftClassName =
-  "w-full rounded-xl border border-[#fec288] bg-[#fffdf3] px-4 py-3 text-sm text-[#4b302a] outline-none transition focus:border-[#fa5c5c] focus:ring-4 focus:ring-[#fa5c5c]/10";
+  "w-full rounded-xl border border-[var(--border-warm)] bg-[var(--bg-subtle)] px-4 py-3 text-sm text-[var(--text)] outline-none transition focus:border-[var(--red)] focus:ring-4 focus:ring-[var(--red-glow)]";
 
 export const internalSectionClassName =
-  "rounded-[1.65rem] border border-[#fec288] bg-white/92 p-6 shadow-[0_18px_45px_rgba(94,52,33,0.08)]";
+  "rounded-[1.65rem] border border-[var(--border)] bg-[var(--bg)] p-6 shadow-sm";
 
 export const internalCardClassName =
-  "rounded-2xl border border-[#fec288] bg-white p-5 shadow-sm";
+  "rounded-2xl border border-[var(--border-warm)] bg-[var(--bg)] p-5 shadow-sm";
 
 export const internalHeroSectionClassName =
-  "rounded-[2rem] border border-[#fec288] bg-[linear-gradient(135deg,#fff7cf_0%,#fff3d2_58%,#ffd9b6_100%)] p-7 shadow-[0_18px_50px_rgba(94,52,33,0.08)]";
+  "rounded-[2rem] border border-[var(--border-warm)] bg-[var(--bg-warm)] p-7 shadow-sm";
 
 export const internalEyebrowClassName =
-  "text-xs font-semibold uppercase tracking-[0.28em] text-[#fd8a6b]";
+  "text-xs font-semibold uppercase tracking-[0.28em] text-[var(--red-dark)]";
 
 export const internalTitleClassName =
-  "text-3xl font-semibold tracking-tight text-[#4b302a]";
+  "text-3xl font-semibold tracking-tight text-[var(--text)]";
 
 export const internalBodyCopyClassName =
-  "mt-2 text-sm leading-7 text-[#7a5a4d]";
+  "mt-2 text-sm leading-7 text-[var(--muted)]";
 
-export const internalMutedTextClassName = "text-sm text-[#7a5a4d]";
+export const internalMutedTextClassName = "text-sm text-[var(--muted)]";
 
 export const internalSectionTitleClassName =
-  "text-xl font-semibold text-[#4b302a]";
+  "text-xl font-semibold text-[var(--text)]";
 
 export const internalSectionDescriptionClassName =
-  "mt-1 text-sm leading-6 text-[#7a5a4d]";
+  "mt-1 text-sm leading-6 text-[var(--muted)]";
 
 export const internalPanelEyebrowClassName =
-  "text-[11px] font-semibold uppercase tracking-[0.24em] text-[#fd8a6b]";
+  "text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--red-dark)]";
 
 export const internalCardTitleClassName =
-  "mt-2 text-xl font-semibold text-[#4b302a]";
+  "mt-2 text-xl font-semibold text-[var(--text)]";
 
 export const internalLabelClassName =
-  "mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-[#fa5c5c]";
+  "mb-2 block text-xs font-semibold uppercase tracking-[0.22em] text-[var(--red-dark)]";
 
 export const internalPrimaryButtonClassName =
-  "rounded-full bg-[#fa5c5c] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#fd8a6b] disabled:opacity-60";
+  "rounded-full bg-[var(--red)] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[var(--red-dark)] disabled:opacity-60 shadow-[0_4px_18px_rgba(189,17,74,0.32)] hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0";
 
 export const internalSecondaryButtonClassName =
-  "rounded-full border border-[#fec288] bg-white px-5 py-3 text-sm font-semibold text-[#7a5a4d] transition hover:bg-[#fff7cf]";
+  "rounded-full bg-[var(--yellow)] px-5 py-3 text-sm font-semibold text-gray-900 transition hover:bg-[var(--yellow-dark)] hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 shadow-[0_4px_18px_rgba(250,226,81,0.32)]";
 
 export const internalMetricCardClassName =
-  "rounded-2xl border border-[#fec288] bg-white/82 px-4 py-4 text-sm";
+  "rounded-2xl border border-[var(--border-warm)] bg-[var(--bg)] px-4 py-4 text-sm";
 
 export const internalSoftMetricCardClassName =
-  "rounded-xl border border-[#fec288] bg-[#fffdf3] px-4 py-4";
+  "rounded-xl border border-[var(--border-warm)] bg-[var(--bg-subtle)] px-4 py-4";
 
 export const internalTableHeaderClassName =
-  "border-b border-[#fec288] text-[#fd8a6b]";
+  "border-b border-[var(--border-warm)] text-[var(--red-dark)]";
 
-export const internalTableRowClassName = "border-b border-[#ffe3c5]";
+export const internalTableRowClassName = "border-b border-[var(--border)]";

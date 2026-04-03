@@ -57,13 +57,13 @@ export async function createUserAction(
     };
   }
 
-  if (getUserByUsername(username)) {
+  if (await getUserByUsername(username)) {
     return { ...initialState, error: "That username already exists." };
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
-  createUser({ username, passwordHash, role });
-  createAuditLog({
+  await createUser({ username, passwordHash, role });
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "create_user",
     targetUsername: username,
@@ -95,7 +95,7 @@ export async function resetUserPasswordAction(
     };
   }
 
-  const user = getUserByUsername(username);
+  const user = await getUserByUsername(username);
   if (!user) {
     return { ...initialState, error: "User not found." };
   }
@@ -121,8 +121,8 @@ export async function resetUserPasswordAction(
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
-  resetUserPassword({ username, passwordHash });
-  createAuditLog({
+  await resetUserPassword({ username, passwordHash });
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "reset_password",
     targetUsername: username,
@@ -156,15 +156,15 @@ export async function toggleUserStatusAction(
     };
   }
 
-  if (!getUserByUsername(username)) {
+  if (!(await getUserByUsername(username))) {
     return { ...initialState, error: "User not found." };
   }
 
-  updateUserStatus({
+  await updateUserStatus({
     username,
     status: status as "active" | "inactive",
   });
-  createAuditLog({
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: status === "inactive" ? "deactivate_user" : "reactivate_user",
     targetUsername: username,
@@ -196,12 +196,12 @@ export async function deleteUserAction(
     };
   }
 
-  if (!getUserByUsername(username)) {
+  if (!(await getUserByUsername(username))) {
     return { ...initialState, error: "User not found." };
   }
 
-  deleteUser(username);
-  createAuditLog({
+  await deleteUser(username);
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "delete_user",
     targetUsername: username,

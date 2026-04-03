@@ -9,6 +9,7 @@ import BloodDonationPanel from "../components/BloodDonationPanel";
 import EventManagementHub from "../components/EventManagementHub";
 import ExpensesPanel from "../components/ExpensesPanel";
 import VolunteerManagementPanel from "../components/VolunteerManagementPanel";
+import CertificateManagementPanel from "../components/CertificateManagementPanel";
 import ImpactMapPanel from "./ImpactMapPanel";
 import UserManagementPanel from "./UserManagementPanel";
 import type { Beneficiary } from "@/lib/beneficiaries";
@@ -16,6 +17,7 @@ import type { BloodDonor, BloodRequest } from "@/lib/blood";
 import type { Expense } from "@/lib/expenses";
 import type { AppEvent } from "@/lib/events";
 import type { Volunteer } from "@/lib/volunteers";
+import type { CertificateTemplate } from "@/lib/certificates";
 import {
   internalCardClassName,
   internalHeroSectionClassName,
@@ -55,6 +57,7 @@ type DashboardClientProps = {
   bloodDonors: BloodDonor[];
   bloodRequests: BloodRequest[];
   expenses: Expense[];
+  templates: CertificateTemplate[];
 };
 
 type MenuKey =
@@ -65,6 +68,7 @@ type MenuKey =
   | "blood"
   | "impact"
   | "expenses"
+  | "certificates"
   | "users";
 
 type NavItem = {
@@ -81,6 +85,7 @@ const primaryNav: NavItem[] = [
   { id: "blood", label: "Blood Support" },
   { id: "impact", label: "Impact Map" },
   { id: "expenses", label: "Expenses" },
+  { id: "certificates", label: "Certificates" },
   { id: "users", label: "User Management", tone: "accent" },
 ];
 
@@ -462,6 +467,7 @@ export default function DashboardClient({
   bloodDonors,
   bloodRequests,
   expenses,
+  templates,
 }: DashboardClientProps) {
   const [menu, setMenu] = useState<MenuKey>("dashboard");
 
@@ -506,6 +512,16 @@ export default function DashboardClient({
         return <ImpactMapPanel events={events} />;
       case "expenses":
         return <ExpensesPanel events={events} expenses={expenses} />;
+      case "certificates":
+        return (
+          <CertificateManagementPanel
+            templates={templates}
+            events={events}
+            volunteers={volunteers}
+            beneficiaries={beneficiaries}
+            bloodDonors={bloodDonors}
+          />
+        );
       case "users":
         return (
           <UserManagementPanel
@@ -520,17 +536,17 @@ export default function DashboardClient({
   };
 
   return (
-    <div className="min-h-screen bg-[#fffdf0] text-[#4b302a]">
+    <div className="min-h-screen bg-[var(--bg-subtle)] text-[var(--text)]">
       <div className="mx-auto grid min-h-screen max-w-[1480px] gap-4 px-3 py-3 lg:grid-cols-[240px_minmax(0,1fr)] lg:px-4 lg:py-4">
-        <aside className="rounded-2xl border border-[#fec288] bg-[#fffdf3] p-4 shadow-sm">
-          <div className="rounded-xl border border-[#fec288] bg-white p-3.5">
-            <p className="text-[11px] uppercase tracking-[0.22em] text-[#fa5c5c]">
+        <aside className="rounded-2xl border border-[var(--border)] bg-[var(--bg)] p-4 shadow-sm">
+          <div className="rounded-xl border border-[var(--border-warm)] bg-[var(--bg-subtle)] p-3.5">
+            <p className="text-[11px] uppercase tracking-[0.22em] text-[var(--red-dark)]">
               Signed in as
             </p>
-            <p className="mt-1.5 text-base font-semibold text-[#4b302a]">
+            <p className="mt-1.5 text-base font-semibold text-[var(--text)]">
               {currentUsername}
             </p>
-            <p className="mt-1 text-sm text-[#7a5a4d]">Protected admin session.</p>
+            <p className="mt-1 text-sm text-[var(--muted)]">Protected admin session.</p>
           </div>
 
           <nav className="mt-4 space-y-1.5">
@@ -544,32 +560,32 @@ export default function DashboardClient({
                   onClick={() => setMenu(item.id)}
                   className={`flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-left text-sm font-medium transition ${
                     isActive
-                      ? "border border-[#fa5c5c] bg-[#fa5c5c] text-white shadow-[0_10px_24px_rgba(250,92,92,0.24)]"
+                      ? "border border-[var(--red-dark)] bg-[var(--red-dark)] text-white shadow-md"
                       : item.tone === "accent"
-                        ? "border border-[#fec288] bg-[#fff7cf] text-[#fa5c5c] hover:bg-[#fff0b8]"
-                        : "text-[#7a5a4d] hover:bg-[#fff7cf]"
+                        ? "border border-[var(--yellow)] bg-[var(--yellow-glow)] text-[var(--red-dark)] hover:bg-[var(--yellow)] hover:text-gray-900"
+                        : "text-[var(--text)] hover:bg-[var(--red-glow)] hover:text-[var(--red-dark)]"
                   }`}
                 >
                   <span>{item.label}</span>
-                  {isActive && <span className="h-2.5 w-2.5 rounded-full bg-[#fbef76]" />}
+                  {isActive && <span className="h-2.5 w-2.5 rounded-full bg-[var(--yellow)]" />}
                 </button>
               );
             })}
           </nav>
 
-          <div className="mt-4 rounded-xl border border-[#fec288] bg-white p-3.5">
-            <p className="text-[11px] uppercase tracking-[0.22em] text-[#fa5c5c]">
+          <div className="mt-4 rounded-xl border border-[var(--border-warm)] bg-[var(--bg-subtle)] p-3.5">
+            <p className="text-[11px] uppercase tracking-[0.22em] text-[var(--red-dark)]">
               Current state
             </p>
             <div className="mt-3 flex items-center justify-between text-sm">
-              <span className="text-[#7a5a4d]">Protected routes</span>
-              <span className="rounded-full bg-[#fff0b8] px-3 py-1 font-medium text-[#fa5c5c]">
+              <span className="text-[var(--text)]">Protected routes</span>
+              <span className="rounded-full bg-[var(--red-glow)] px-3 py-1 font-medium text-[var(--red-dark)]">
                 Active
               </span>
             </div>
             <div className="mt-2 flex items-center justify-between text-sm">
-              <span className="text-[#7a5a4d]">Audit logging</span>
-              <span className="rounded-full bg-[#fff7cf] px-3 py-1 font-medium text-[#fd8a6b]">
+              <span className="text-[var(--text)]">Audit logging</span>
+              <span className="rounded-full bg-[var(--red-glow)] px-3 py-1 font-medium text-[var(--red-dark)]">
                 Enabled
               </span>
             </div>
@@ -578,13 +594,13 @@ export default function DashboardClient({
           <button
             type="button"
             onClick={logout}
-            className="mt-4 w-full rounded-xl border border-[#fec288] bg-white px-4 py-2.5 text-sm font-semibold text-[#fa5c5c] transition hover:bg-[#fff7cf]"
+            className="mt-4 w-full rounded-xl border border-[var(--border)] bg-[var(--bg)] px-4 py-2.5 text-sm font-semibold text-[var(--red)] transition hover:bg-[var(--red-glow)] hover:text-[var(--red-dark)]"
           >
             Logout
           </button>
         </aside>
 
-        <main className="min-w-0 rounded-2xl border border-[#fec288] bg-[#fffdf3] p-3 shadow-sm sm:p-4 lg:p-5">
+        <main className="min-w-0 rounded-2xl border border-[var(--border)] bg-[var(--bg)] p-3 shadow-sm sm:p-4 lg:p-5">
           <div className="min-w-0">{renderContent()}</div>
         </main>
       </div>

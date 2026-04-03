@@ -49,18 +49,18 @@ export default function LoginPage() {
 
   return (
     <main
-      className={`${displayFont.variable} ${bodyFont.variable} min-h-screen bg-[#fff9ee] px-4 py-6 text-[#213028] sm:px-6 lg:px-8`}
+      className={`${displayFont.variable} ${bodyFont.variable} min-h-screen bg-[var(--bg-warm)] px-4 py-6 text-[var(--text)] sm:px-6 lg:px-8`}
     >
       <div className="mx-auto grid min-h-[calc(100vh-3rem)] max-w-6xl gap-4 lg:grid-cols-[1fr_420px]">
-        <section className="rounded-[1.75rem] border border-[#eadfb4] bg-[#fffaf0] p-6 shadow-sm sm:p-8">
+        <section className="rounded-[1.75rem] border border-[var(--border)] bg-[var(--bg)] p-6 shadow-sm sm:p-8">
           <div className="max-w-3xl">
-            <p className="text-[11px] uppercase tracking-[0.3em] text-[#8a7441]">
+            <p className="text-[11px] uppercase tracking-[0.3em] font-bold text-[var(--red)]">
               Help Me Help You NGO
             </p>
-            <h1 className="mt-3 font-[var(--font-display)] text-4xl leading-none tracking-tight text-[#213028] sm:text-5xl">
+            <h1 className="mt-3 font-[var(--font-display)] text-4xl leading-none tracking-tight text-[var(--text)] sm:text-5xl">
               One portal for programs, people, and field operations.
             </h1>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-[#74673f] sm:text-base">
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--muted)] sm:text-base">
               This admin workspace is built for a multi-service NGO. Manage
               events, volunteers, user access, impact locations, and blood
               support workflows without a heavy interface.
@@ -84,19 +84,19 @@ export default function LoginPage() {
             ].map((item) => (
               <div
                 key={item.title}
-                className="rounded-xl border border-[#efe4bf] bg-white p-4"
+                className="rounded-xl border border-[var(--border-warm)] hover:border-[var(--red-glow)] bg-[var(--bg-subtle)] p-4 transition-colors"
               >
-                <p className="text-base font-semibold text-[#213028]">{item.title}</p>
-                <p className="mt-2 text-sm leading-6 text-[#776942]">{item.body}</p>
+                <p className="text-base font-semibold text-[var(--text)]">{item.title}</p>
+                <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{item.body}</p>
               </div>
             ))}
           </div>
 
-          <div className="mt-6 rounded-xl border border-[#efe4bf] bg-white p-4">
-            <p className="text-[11px] uppercase tracking-[0.24em] text-[#8a7441]">
+          <div className="mt-6 rounded-xl border border-[var(--border-warm)] bg-[var(--bg-subtle)] p-4">
+            <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--red)]">
               Secure access
             </p>
-            <p className="mt-2 text-sm leading-6 text-[#776942]">
+            <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
               Admin sign-in is protected and management actions are audit-logged.
               Use the assigned credentials for your team account.
             </p>
@@ -104,16 +104,19 @@ export default function LoginPage() {
         </section>
 
         <section className="flex items-center">
-          <div className="w-full rounded-[1.75rem] border border-[#eadfb4] bg-white p-6 shadow-sm sm:p-7">
-            <div className="mb-6 flex items-center gap-3">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-[#efe4bf] bg-[#fffaf0]">
+          <div className="w-full rounded-[1.75rem] border border-[var(--border)] bg-[var(--bg)] p-6 shadow-sm sm:p-7 relative overflow-hidden">
+            {/* Background design element with yellow highlight */}
+            <div className="absolute -top-12 -right-12 h-32 w-32 rounded-full bg-[var(--yellow-glow)] opacity-50 blur-2xl pointer-events-none" />
+
+            <div className="mb-6 flex items-center gap-3 relative z-10">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-[var(--red-glow)] bg-[var(--bg-subtle)]">
                 <Image src="/logo.png" alt="Logo" width={40} height={40} />
               </div>
               <div>
-                <h2 className="font-[var(--font-display)] text-3xl leading-none text-[#213028]">
+                <h2 className="font-[var(--font-display)] text-3xl font-bold leading-none text-[var(--text)]">
                   Admin Login
                 </h2>
-                <p className="mt-1 text-sm text-[#776942]">
+                <p className="mt-1 text-sm text-[var(--muted)]">
                   Secure access to the NGO operations panel.
                 </p>
               </div>
@@ -121,20 +124,20 @@ export default function LoginPage() {
 
             <form
               onSubmit={handleLogin}
-              className={`space-y-4 ${shake ? "animate-[shake_0.55s_cubic-bezier(.36,.07,.19,.97)_both]" : ""}`}
+              className={`space-y-4 relative z-10 ${shake ? "animate-[shake_0.55s_cubic-bezier(.36,.07,.19,.97)_both]" : ""}`}
             >
               <div className="space-y-2">
                 <label
                   htmlFor="username"
-                  className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#8a7441]"
+                  className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--red-dark)]"
                 >
-                  Username <span className="required-indicator">*</span>
+                  Username <span className="required-indicator text-[var(--yellow-dark)]">*</span>
                 </label>
                 <input
                   id="username"
                   type="text"
                   placeholder="Enter your username"
-                  className="w-full rounded-xl border border-[#eadfb4] bg-[#fffdf8] px-4 py-3 text-[#213028] outline-none transition focus:border-[#c19831] focus:ring-4 focus:ring-[#c19831]/10"
+                  className="w-full rounded-xl border border-[var(--border)] bg-[var(--bg-subtle)] px-4 py-3 text-[var(--text)] outline-none transition focus:border-[var(--red)] focus:ring-4 focus:ring-[var(--red-glow)]"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   required
@@ -144,15 +147,15 @@ export default function LoginPage() {
               <div className="space-y-2">
                 <label
                   htmlFor="password"
-                  className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#8a7441]"
+                  className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--red-dark)]"
                 >
-                  Password <span className="required-indicator">*</span>
+                  Password <span className="required-indicator text-[var(--yellow-dark)]">*</span>
                 </label>
                 <input
                   id="password"
                   type="password"
                   placeholder="Enter your password"
-                  className="w-full rounded-xl border border-[#eadfb4] bg-[#fffdf8] px-4 py-3 text-[#213028] outline-none transition focus:border-[#c19831] focus:ring-4 focus:ring-[#c19831]/10"
+                  className="w-full rounded-xl border border-[var(--border)] bg-[var(--bg-subtle)] px-4 py-3 text-[var(--text)] outline-none transition focus:border-[var(--red)] focus:ring-4 focus:ring-[var(--red-glow)]"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -160,14 +163,14 @@ export default function LoginPage() {
               </div>
 
               {error && (
-                <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+                <p className="rounded-xl border border-[var(--red-light)] bg-[var(--red-glow)] px-4 py-3 text-sm font-medium text-[var(--red-dark)]">
                   {error}
                 </p>
               )}
 
               <button
                 type="submit"
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#b08b2e] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#c19831] disabled:cursor-not-allowed disabled:opacity-75"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--red)] px-4 py-3 text-sm font-bold tracking-wide text-white transition hover:bg-[var(--red-dark)] hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-75"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -181,11 +184,11 @@ export default function LoginPage() {
               </button>
             </form>
 
-            <p className="mt-5 text-sm text-[#776942]">
+            <p className="mt-5 text-sm text-[var(--muted)] relative z-10">
               Need help?{" "}
               <a
                 href="mailto:support@helpmehelpyou.org"
-                className="font-semibold text-[#8b6b18] transition hover:text-[#a47f21]"
+                className="font-semibold text-[var(--red)] transition hover:text-[var(--red-dark)]"
               >
                 Contact support
               </a>

@@ -8,20 +8,34 @@ import { listExpenses } from "@/lib/expenses";
 import { listEvents } from "@/lib/events";
 import { listAuditLogs, listUsers } from "@/lib/users";
 import { listVolunteers } from "@/lib/volunteers";
+import { listTemplates } from "@/lib/certificates";
 
 export default async function DashboardPage() {
   const adminUser = await requireActiveAdminSession()
     .then(({ user }) => user)
     .catch(() => redirect("/login"));
 
-  const users = listUsers();
-  const auditLogs = listAuditLogs();
-  const events = listEvents();
-  const volunteers = listVolunteers();
-  const bloodDonors = listBloodDonors();
-  const bloodRequests = listBloodRequests();
-  const expenses = listExpenses();
-  const beneficiaries = listBeneficiaries();
+  const [
+    users,
+    auditLogs,
+    events,
+    volunteers,
+    bloodDonors,
+    bloodRequests,
+    expenses,
+    beneficiaries,
+    templates,
+  ] = await Promise.all([
+    Promise.resolve(listUsers()),
+    Promise.resolve(listAuditLogs()),
+    listEvents(),
+    Promise.resolve(listVolunteers()),
+    Promise.resolve(listBloodDonors()),
+    Promise.resolve(listBloodRequests()),
+    Promise.resolve(listExpenses()),
+    Promise.resolve(listBeneficiaries()),
+    Promise.resolve(listTemplates()),
+  ]);
 
   return (
     <DashboardClient
@@ -34,6 +48,7 @@ export default async function DashboardPage() {
       bloodRequests={bloodRequests}
       expenses={expenses}
       beneficiaries={beneficiaries}
+      templates={templates}
     />
   );
 }

@@ -8,8 +8,8 @@ export const metadata = {
     "View event locations on the CEP Project public impact map with OpenStreetMap markers.",
 };
 
-export default function ImpactPage() {
-  const events = listEvents()
+export default async function ImpactPage() {
+  const events = (await listEvents())
     .filter((event) => event.markerStatus === "active")
     .map((event) => ({
       id: event.id,

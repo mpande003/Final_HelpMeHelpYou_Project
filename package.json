@@ -11,8 +11,10 @@
     "seed:admin": "node scripts/seed-admin.mjs"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.101.1",
     "bcryptjs": "^3.0.3",
-    "better-sqlite3": "^12.8.0",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.2.1",
     "leaflet": "^1.9.4",
     "next": "16.1.6",
     "next-auth": "^4.24.13",

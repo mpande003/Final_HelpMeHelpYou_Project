@@ -42,7 +42,9 @@ export async function createExpenseAction(
   const expenseDate = normalizeString(formData.get("expenseDate"));
   const eventIdValue = normalizeString(formData.get("eventId"));
   const eventId = eventIdValue ? Number(eventIdValue) : null;
-  const event = eventId ? listEvents().find((item) => item.id === eventId) : null;
+  const event = eventId
+    ? (await listEvents()).find((item) => item.id === eventId)
+    : null;
 
   if (!expenseTitle || !category || !amount || !expenseDate) {
     return {
@@ -51,7 +53,7 @@ export async function createExpenseAction(
     };
   }
 
-  createExpense({
+  await createExpense({
     eventId,
     eventName: event?.eventName ?? null,
     expenseTitle,
@@ -66,7 +68,7 @@ export async function createExpenseAction(
     createdBy: session.user.name ?? "unknown",
   });
 
-  createAuditLog({
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "create_expense",
     targetUsername: expenseTitle,
@@ -92,8 +94,10 @@ export async function updateExpenseAction(
   const expenseDate = normalizeString(formData.get("expenseDate"));
   const eventIdValue = normalizeString(formData.get("eventId"));
   const eventId = eventIdValue ? Number(eventIdValue) : null;
-  const event = eventId ? listEvents().find((item) => item.id === eventId) : null;
-  const existing = listExpenses().find((item) => item.id === expenseId);
+  const event = eventId
+    ? (await listEvents()).find((item) => item.id === eventId)
+    : null;
+  const existing = (await listExpenses()).find((item) => item.id === expenseId);
 
   if (Number.isNaN(expenseId) || !existing) {
     return { ...initialState, error: "Expense entry not found." };
@@ -106,7 +110,7 @@ export async function updateExpenseAction(
     };
   }
 
-  updateExpense({
+  await updateExpense({
     id: expenseId,
     eventId,
     eventName: event?.eventName ?? existing.eventName ?? null,
@@ -121,7 +125,7 @@ export async function updateExpenseAction(
     description: normalizeString(formData.get("description")) || null,
   });
 
-  createAuditLog({
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "update_expense",
     targetUsername: expenseTitle,
@@ -138,14 +142,14 @@ export async function updateExpenseAction(
 export async function deleteExpenseAction(formData: FormData) {
   const session = await requireAdmin();
   const expenseId = Number(normalizeString(formData.get("expenseId")));
-  const expense = listExpenses().find((item) => item.id === expenseId);
+  const expense = (await listExpenses()).find((item) => item.id === expenseId);
 
   if (Number.isNaN(expenseId) || !expense) {
     throw new Error("Expense entry not found.");
   }
 
-  deleteExpense(expenseId);
-  createAuditLog({
+  await deleteExpense(expenseId);
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "delete_expense",
     targetUsername: expense.expenseTitle,

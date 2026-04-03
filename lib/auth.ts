@@ -19,26 +19,21 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const username = credentials?.username?.trim();
+        const username = credentials?.username?.trim().toLowerCase();
         const password = credentials?.password;
 
         if (!username || !password) {
           return null;
         }
 
-        const user = getUserByUsername(username);
-        if (!user) {
-          return null;
-        }
+        // ✅ FIX: add await
+        const user = await getUserByUsername(username);
 
-        if (user.status !== "active") {
-          return null;
-        }
+        if (!user) return null;
+        if (user.status !== "active") return null;
 
         const passwordMatches = await bcrypt.compare(password, user.passwordHash);
-        if (!passwordMatches) {
-          return null;
-        }
+        if (!passwordMatches) return null;
 
         return {
           id: String(user.id),
@@ -50,17 +45,13 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
-      if (user) {
-        token.role = user.role;
-      }
-
+      if (user) token.role = user.role;
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.role = typeof token.role === "string" ? token.role : "";
       }
-
       return session;
     },
   },
@@ -75,7 +66,9 @@ export async function requireActiveAdminSession() {
     throw new Error("Unauthorized");
   }
 
-  const user = getUserByUsername(username);
+  // ✅ FIX: add await
+  const user = await getUserByUsername(username);
+
   if (!user || user.status !== "active" || user.role !== "admin") {
     throw new Error("Unauthorized");
   }

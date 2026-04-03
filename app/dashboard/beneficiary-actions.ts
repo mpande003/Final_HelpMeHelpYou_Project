@@ -40,7 +40,9 @@ export async function createBeneficiaryAction(
   const supportType = normalizeString(formData.get("supportType"));
   const eventIdValue = normalizeString(formData.get("eventId"));
   const eventId = eventIdValue ? Number(eventIdValue) : null;
-  const event = eventId ? listEvents().find((item) => item.id === eventId) : null;
+  const event = eventId
+    ? (await listEvents()).find((item) => item.id === eventId)
+    : null;
 
   if (!fullName || !supportType) {
     return {
@@ -49,7 +51,7 @@ export async function createBeneficiaryAction(
     };
   }
 
-  createBeneficiary({
+  await createBeneficiary({
     eventId,
     eventName: event?.eventName ?? null,
     fullName,
@@ -62,7 +64,7 @@ export async function createBeneficiaryAction(
     createdBy: session.user.name ?? "unknown",
   });
 
-  createAuditLog({
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "create_beneficiary",
     targetUsername: fullName,
@@ -82,12 +84,14 @@ export async function updateBeneficiaryAction(
 ): Promise<BeneficiaryActionState> {
   const session = await requireAdmin();
   const beneficiaryId = Number(normalizeString(formData.get("beneficiaryId")));
-  const existing = listBeneficiaries().find((item) => item.id === beneficiaryId);
+  const existing = (await listBeneficiaries()).find((item) => item.id === beneficiaryId);
   const fullName = normalizeString(formData.get("fullName"));
   const supportType = normalizeString(formData.get("supportType"));
   const eventIdValue = normalizeString(formData.get("eventId"));
   const eventId = eventIdValue ? Number(eventIdValue) : null;
-  const event = eventId ? listEvents().find((item) => item.id === eventId) : null;
+  const event = eventId
+    ? (await listEvents()).find((item) => item.id === eventId)
+    : null;
 
   if (Number.isNaN(beneficiaryId) || !existing) {
     return { ...initialState, error: "Beneficiary entry not found." };
@@ -100,7 +104,7 @@ export async function updateBeneficiaryAction(
     };
   }
 
-  updateBeneficiary({
+  await updateBeneficiary({
     id: beneficiaryId,
     eventId,
     eventName: event?.eventName ?? existing.eventName ?? null,
@@ -113,7 +117,7 @@ export async function updateBeneficiaryAction(
     notes: normalizeString(formData.get("notes")) || null,
   });
 
-  createAuditLog({
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "update_beneficiary",
     targetUsername: fullName,
@@ -130,14 +134,14 @@ export async function updateBeneficiaryAction(
 export async function deleteBeneficiaryAction(formData: FormData) {
   const session = await requireAdmin();
   const beneficiaryId = Number(normalizeString(formData.get("beneficiaryId")));
-  const beneficiary = listBeneficiaries().find((item) => item.id === beneficiaryId);
+  const beneficiary = (await listBeneficiaries()).find((item) => item.id === beneficiaryId);
 
   if (Number.isNaN(beneficiaryId) || !beneficiary) {
     throw new Error("Beneficiary entry not found.");
   }
 
-  deleteBeneficiary(beneficiaryId);
-  createAuditLog({
+  await deleteBeneficiary(beneficiaryId);
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "delete_beneficiary",
     targetUsername: beneficiary.fullName,

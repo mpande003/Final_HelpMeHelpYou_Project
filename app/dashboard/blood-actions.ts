@@ -48,7 +48,9 @@ export async function createBloodDonorAction(
   const bloodBankName = normalizeString(formData.get("bloodBankName"));
   const eventIdValue = normalizeString(formData.get("eventId"));
   const eventId = eventIdValue ? Number(eventIdValue) : null;
-  const event = eventId ? listEvents().find((item) => item.id === eventId) : null;
+  const event = eventId
+    ? (await listEvents()).find((item) => item.id === eventId)
+    : null;
 
   if (!donorName || !donorPhone || !bloodGroup || !bloodBankName) {
     return {
@@ -57,7 +59,7 @@ export async function createBloodDonorAction(
     };
   }
 
-  createBloodDonor({
+  await createBloodDonor({
     eventId,
     eventName: event?.eventName ?? null,
     donorName,
@@ -76,7 +78,7 @@ export async function createBloodDonorAction(
     createdBy: session.user.name ?? "unknown",
   });
 
-  createAuditLog({
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "register_blood_donor",
     targetUsername: donorName,
@@ -103,7 +105,7 @@ export async function createBloodRequestAction(
   const donorIdValue = normalizeString(formData.get("donorId"));
   const donorId = donorIdValue ? Number(donorIdValue) : null;
   const donor = donorId
-    ? listBloodDonors().find((item) => item.id === donorId)
+    ? (await listBloodDonors()).find((item) => item.id === donorId)
     : null;
 
   if (
@@ -119,7 +121,7 @@ export async function createBloodRequestAction(
     };
   }
 
-  createBloodRequest({
+  await createBloodRequest({
     donorId,
     donorName: donor?.donorName ?? null,
     requesterName,
@@ -134,7 +136,7 @@ export async function createBloodRequestAction(
     createdBy: session.user.name ?? "unknown",
   });
 
-  createAuditLog({
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "raise_blood_request",
     targetUsername: patientName,
@@ -162,8 +164,10 @@ export async function updateBloodDonorAction(
   const bloodBankName = normalizeString(formData.get("bloodBankName"));
   const eventIdValue = normalizeString(formData.get("eventId"));
   const eventId = eventIdValue ? Number(eventIdValue) : null;
-  const event = eventId ? listEvents().find((item) => item.id === eventId) : null;
-  const existing = listBloodDonors().find((item) => item.id === donorId);
+  const event = eventId
+    ? (await listEvents()).find((item) => item.id === eventId)
+    : null;
+  const existing = (await listBloodDonors()).find((item) => item.id === donorId);
 
   if (Number.isNaN(donorId) || !existing) {
     return { ...initialState, error: "Blood donor not found." };
@@ -176,7 +180,7 @@ export async function updateBloodDonorAction(
     };
   }
 
-  updateBloodDonor({
+  await updateBloodDonor({
     id: donorId,
     eventId,
     eventName: event?.eventName ?? existing.eventName ?? null,
@@ -196,7 +200,7 @@ export async function updateBloodDonorAction(
     notes: normalizeString(formData.get("notes")) || null,
   });
 
-  createAuditLog({
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "update_blood_donor",
     targetUsername: donorName,
@@ -213,14 +217,14 @@ export async function updateBloodDonorAction(
 export async function deleteBloodDonorAction(formData: FormData) {
   const session = await requireAdmin();
   const donorId = Number(normalizeString(formData.get("donorId")));
-  const donor = listBloodDonors().find((item) => item.id === donorId);
+  const donor = (await listBloodDonors()).find((item) => item.id === donorId);
 
   if (Number.isNaN(donorId) || !donor) {
     throw new Error("Blood donor not found.");
   }
 
-  deleteBloodDonor(donorId);
-  createAuditLog({
+  await deleteBloodDonor(donorId);
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "delete_blood_donor",
     targetUsername: donor.donorName,
@@ -235,7 +239,7 @@ export async function updateBloodRequestAction(
 ): Promise<BloodActionState> {
   const session = await requireAdmin();
   const requestId = Number(normalizeString(formData.get("requestId")));
-  const existing = listBloodRequests().find((item) => item.id === requestId);
+  const existing = (await listBloodRequests()).find((item) => item.id === requestId);
   const requesterName = normalizeString(formData.get("requesterName"));
   const requesterPhone = normalizeString(formData.get("requesterPhone"));
   const patientName = normalizeString(formData.get("patientName"));
@@ -244,7 +248,7 @@ export async function updateBloodRequestAction(
   const donorIdValue = normalizeString(formData.get("donorId"));
   const donorId = donorIdValue ? Number(donorIdValue) : null;
   const donor = donorId
-    ? listBloodDonors().find((item) => item.id === donorId)
+    ? (await listBloodDonors()).find((item) => item.id === donorId)
     : null;
 
   if (Number.isNaN(requestId) || !existing) {
@@ -264,7 +268,7 @@ export async function updateBloodRequestAction(
     };
   }
 
-  updateBloodRequest({
+  await updateBloodRequest({
     id: requestId,
     donorId,
     donorName: donor?.donorName ?? null,
@@ -287,7 +291,7 @@ export async function updateBloodRequestAction(
     notes: normalizeString(formData.get("notes")) || null,
   });
 
-  createAuditLog({
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "update_blood_request",
     targetUsername: patientName,
@@ -304,14 +308,14 @@ export async function updateBloodRequestAction(
 export async function deleteBloodRequestAction(formData: FormData) {
   const session = await requireAdmin();
   const requestId = Number(normalizeString(formData.get("requestId")));
-  const request = listBloodRequests().find((item) => item.id === requestId);
+  const request = (await listBloodRequests()).find((item) => item.id === requestId);
 
   if (Number.isNaN(requestId) || !request) {
     throw new Error("Blood request not found.");
   }
 
-  deleteBloodRequest(requestId);
-  createAuditLog({
+  await deleteBloodRequest(requestId);
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "delete_blood_request",
     targetUsername: request.patientName,
@@ -323,14 +327,14 @@ export async function deleteBloodRequestAction(formData: FormData) {
 export async function verifyBloodRequestAction(formData: FormData) {
   const session = await requireAdmin();
   const requestId = Number(normalizeString(formData.get("requestId")));
-  const request = listBloodRequests().find((item) => item.id === requestId);
+  const request = (await listBloodRequests()).find((item) => item.id === requestId);
 
   if (Number.isNaN(requestId) || !request) {
     throw new Error("Blood request not found.");
   }
 
-  verifyBloodRequest(requestId, session.user.name ?? "unknown");
-  createAuditLog({
+  await verifyBloodRequest(requestId, session.user.name ?? "unknown");
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "verify_blood_request",
     targetUsername: request.patientName,
@@ -342,14 +346,14 @@ export async function verifyBloodRequestAction(formData: FormData) {
 export async function fulfillBloodRequestAction(formData: FormData) {
   const session = await requireAdmin();
   const requestId = Number(normalizeString(formData.get("requestId")));
-  const request = listBloodRequests().find((item) => item.id === requestId);
+  const request = (await listBloodRequests()).find((item) => item.id === requestId);
 
   if (Number.isNaN(requestId) || !request) {
     throw new Error("Blood request not found.");
   }
 
-  fulfillBloodRequest(requestId, session.user.name ?? "unknown");
-  createAuditLog({
+  await fulfillBloodRequest(requestId, session.user.name ?? "unknown");
+  await createAuditLog({
     actorUsername: session.user.name ?? "unknown",
     action: "fulfill_blood_request",
     targetUsername: request.patientName,

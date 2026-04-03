@@ -14,19 +14,23 @@
 }
 
 :root {
-  --red: #c62828;
-  --red-dark: #8e1b1b;
-  --red-light: #ef5350;
-  --red-glow: rgba(198, 40, 40, 0.1);
-  --bg: #ffffff;
-  --bg-warm: #fdf8f8;
+  --red: #d75656;
+  --red-dark: #bd114a;
+  --red-light: #e87b7b;
+  --red-glow: rgba(215, 86, 86, 0.1);
+  --yellow: #fae251;
+  --yellow-dark: #dfc845;
+  --yellow-glow: rgba(250, 226, 81, 0.2);
+  --bg: #fcfaf8;
+  --bg-warm: #eeeeee;
+  --bg-subtle: #f5f2f0;
   --text: #1a1a1a;
   --muted: #6b7280;
   --border: #e5e7eb;
-  --border-warm: #f0d9d9;
-  --shadow-sm: 0 2px 12px rgba(198, 40, 40, 0.06);
-  --shadow-md: 0 8px 32px rgba(198, 40, 40, 0.1);
-  --shadow-lg: 0 16px 56px rgba(198, 40, 40, 0.16);
+  --border-warm: #e6e6e6;
+  --shadow-sm: 0 2px 12px rgba(189, 17, 74, 0.06);
+  --shadow-md: 0 8px 32px rgba(189, 17, 74, 0.1);
+  --shadow-lg: 0 16px 56px rgba(189, 17, 74, 0.16);
   --num-font: "Arial Black", "Impact", sans-serif;
 }
 
@@ -301,13 +305,26 @@ form label:has(> input[type="checkbox"][required]) > span:last-child::after {
   background: var(--red);
   color: #fff !important;
   border-color: var(--red);
-  box-shadow: 0 4px 18px rgba(198, 40, 40, 0.32);
+  box-shadow: 0 4px 18px rgba(189, 17, 74, 0.32);
 }
 
 .static-site .btn-primary:hover {
   background: var(--red-dark);
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(198, 40, 40, 0.42);
+  box-shadow: 0 8px 28px rgba(189, 17, 74, 0.42);
+}
+
+.static-site .btn-secondary {
+  background: var(--yellow);
+  color: #1a1a1a !important;
+  border-color: var(--yellow);
+  box-shadow: 0 4px 18px rgba(250, 226, 81, 0.32);
+}
+
+.static-site .btn-secondary:hover {
+  background: var(--yellow-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(250, 226, 81, 0.42);
 }
 
 .static-site .btn-outline {
@@ -317,9 +334,8 @@ form label:has(> input[type="checkbox"][required]) > span:last-child::after {
 }
 
 .static-site .btn-outline:hover {
-  border-color: var(--red);
-  color: var(--red);
-  background: var(--red-glow);
+  border-color: var(--yellow);
+  background: var(--yellow-glow);
   transform: translateY(-2px);
 }
 
