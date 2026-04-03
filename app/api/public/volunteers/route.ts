@@ -67,7 +67,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const result = persistVolunteerRegistration({
+  const result = await persistVolunteerRegistration({
     formData,
     createdBy: "public_form",
     publicSubmission: true,

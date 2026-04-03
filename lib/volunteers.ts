@@ -42,7 +42,8 @@ export async function createVolunteer(input: any) {
       consent_terms: input.consentTerms ? 1 : 0,
       consent_photos: input.consentPhotos ? 1 : 0,
       consent_policies: input.consentPolicies ? 1 : 0,
-      created_by: input.createdBy,
+      created_by: input.createdBy || "system",
+      approval_status: input.approvalStatus || "pending",
     },
   ]);
 

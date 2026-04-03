@@ -41,7 +41,7 @@ export async function createVolunteerAction(
   formData: FormData,
 ): Promise<VolunteerFormState> {
   const session = await requireAdmin();
-  const result = persistVolunteerRegistration({
+  const result = await persistVolunteerRegistration({
     formData,
     createdBy: session.user.name ?? "unknown",
   });

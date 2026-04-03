@@ -6,11 +6,11 @@ export type VolunteerSubmissionResult = {
   success: string;
 };
 
-export function persistVolunteerRegistration(input: {
+export async function persistVolunteerRegistration(input: {
   formData: FormData;
   createdBy: string;
   publicSubmission?: boolean;
-}): VolunteerSubmissionResult {
+}): Promise<VolunteerSubmissionResult> {
   const { formData, createdBy, publicSubmission = false } = input;
   const parsed = parseVolunteerFormData(formData, { publicSubmission });
 
@@ -21,13 +21,22 @@ export function persistVolunteerRegistration(input: {
     };
   }
 
-  createVolunteer({
-    ...parsed.input,
-    createdBy,
-  });
+  try {
+    await createVolunteer({
+      ...parsed.input,
+      createdBy,
+      approvalStatus: publicSubmission ? "pending" : "approved",
+    });
 
-  return {
-    error: "",
-    success: `Registered volunteer "${parsed.input.fullName}".`,
-  };
+    return {
+      error: "",
+      success: `Registered volunteer "${parsed.input.fullName}".`,
+    };
+  } catch (error: any) {
+    console.error("Failed to insert volunteer:", error);
+    return {
+      error: "Failed to persist volunteer registration. Please try again.",
+      success: "",
+    };
+  }
 }
