@@ -217,6 +217,17 @@ export default function CertificateManagementPanel({
     return list;
   };
 
+  const getPreviewText = (val?: string) => {
+    switch(val) {
+      case "[Name]": return "Preview Name";
+      case "[Event]": return "Sample Event Name";
+      case "[Date]": return new Date().toLocaleDateString();
+      case "[Role]": return "Volunteer";
+      case "[Token]": return "CERT-123456";
+      default: return val || "Text";
+    }
+  };
+
   const togglePersonSelection = (id: string) => {
     setSelectedPeopleIds(prev => {
       const n = new Set(prev);
@@ -269,7 +280,7 @@ export default function CertificateManagementPanel({
            else if (text === "[Role]") text = person.subtext;
            else if (text === "[Token]") text = tokenId;
         }
-        d.innerText = text;
+        d.innerText = text || "";
         overlay.appendChild(d);
       });
 
@@ -382,7 +393,7 @@ export default function CertificateManagementPanel({
                           const nx = Math.round((f.x * container.clientWidth / 100 + data.x) / container.clientWidth * 100);
                           const ny = Math.round((f.y * container.clientHeight / 100 + data.y) / container.clientHeight * 100);
                           handleUpdateField(f.id, { x: Math.max(0,100, nx), y: Math.max(0,100, ny) });
-                        }}>{f.value}</DraggableField>
+                        }}>{getPreviewText(f.value)}</DraggableField>
                       ))}
                     </div>
                   </>
@@ -418,10 +429,20 @@ export default function CertificateManagementPanel({
                  </div>
                  <div className="space-y-3 max-h-[300px] overflow-y-auto pr-1">
                    {fields.map(f => (
-                     <div key={f.id} className="p-2.5 border rounded-xl bg-gray-50 relative group">
+                      <div key={f.id} className="p-2.5 border rounded-xl bg-gray-50 relative group">
                         <button onClick={() => handleRemoveField(f.id)} className="absolute -top-2 -right-2 bg-red-500 text-white w-5 h-5 rounded-full text-[10px] items-center justify-center hidden group-hover:flex">×</button>
                         <div className="grid grid-cols-2 gap-2 mb-2">
-                           <input type="text" value={f.label} onChange={(e) => handleUpdateField(f.id,{label:e.target.value})} className="col-span-2 text-[10px] p-1 border rounded" />
+                           <select value={["[Name]","[Event]","[Date]","[Role]","[Token]"].includes(f.value || "") ? f.value : "custom"} onChange={(e) => handleUpdateField(f.id, {value: e.target.value === "custom" ? "Custom Text" : e.target.value})} className="col-span-2 text-[10px] p-1.5 border rounded bg-white font-bold text-[#4b302a]">
+                             <option value="[Name]">Mapping: Participant Name</option>
+                             <option value="[Event]">Mapping: Event Name</option>
+                             <option value="[Date]">Mapping: Current Date</option>
+                             <option value="[Role]">Mapping: Participant Role</option>
+                             <option value="[Token]">Mapping: Certificate Token</option>
+                             <option value="custom">Static Text (Custom)</option>
+                           </select>
+                           {!["[Name]","[Event]","[Date]","[Role]","[Token]"].includes(f.value || "") && (
+                             <input type="text" value={f.value} onChange={(e) => handleUpdateField(f.id,{value:e.target.value})} className="col-span-2 text-[10px] p-1.5 border rounded border-blue-200" placeholder="Enter static text" />
+                           )}
                            <div className="flex items-center gap-1 bg-white p-1 rounded border text-[9px]">X: <input type="number" value={f.x} onChange={(e) => handleUpdateField(f.id, {x: Number(e.target.value)})} className="w-full outline-none font-bold text-blue-600" />%</div>
                            <div className="flex items-center gap-1 bg-white p-1 rounded border text-[9px]">Y: <input type="number" value={f.y} onChange={(e) => handleUpdateField(f.id, {y: Number(e.target.value)})} className="w-full outline-none font-bold text-blue-600" />%</div>
                         </div>
@@ -461,7 +482,7 @@ export default function CertificateManagementPanel({
                             const ny = Math.round((f.y * c.clientHeight / 100 + data.y) / c.clientHeight * 100);
                             handleUpdateField(f.id, { x: Math.max(0, Math.min(100, nx)), y: Math.max(0, Math.min(100, ny)) });
                          }}>
-                           {f.value === "[Name]" ? "Preview Name" : f.value}
+                           {getPreviewText(f.value)}
                          </DraggableField>
                       ))}
                       {signatures.map(s => (
