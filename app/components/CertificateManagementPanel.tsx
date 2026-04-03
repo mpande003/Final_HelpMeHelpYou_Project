@@ -387,10 +387,10 @@ export default function CertificateManagementPanel({
                 <h3 className="text-lg font-bold text-[#4b302a]">Live Layout Preview</h3>
                 <button onClick={handleAddField} className="text-xs bg-[#fec288] px-3 py-1.5 rounded-full font-black text-[#4b302a] shadow-sm">+ Add Field</button>
               </div>
-              <div className="relative aspect-[1.414/1] bg-[#fffdf3] border-4 border-dashed border-[#e0c4ba] rounded-xl overflow-hidden shadow-inner flex items-center justify-center">
+              <div className="relative aspect-[1.414/1] bg-white border-4 border-dashed border-[#e0c4ba] rounded-xl overflow-hidden shadow-inner flex items-center justify-center">
                 {newTemplateImagePreview ? (
                   <>
-                    <img src={newTemplateImagePreview} className="w-full h-full object-fill" alt="Preview" />
+                    <img src={newTemplateImagePreview} className="w-full h-full object-contain" alt="Preview" />
                     <div className="absolute inset-0">
                       {fields.map(f => (
                         <DraggableField key={f.id} field={f} onStop={(e, data) => {
@@ -478,7 +478,7 @@ export default function CertificateManagementPanel({
             {selectedTemplate ? (
               <>
                 <div className="relative w-full border rounded-2xl bg-white overflow-hidden shadow-2xl ring-1 ring-black/5 aspect-[1.414/1]">
-                   <img src={selectedTemplate.image_url} className="w-full h-full object-fill" alt="Preview" />
+                   <img src={selectedTemplate.image_url} className="w-full h-full object-contain" alt="Preview" />
                    <div className="absolute inset-0">
                       {fields.map(f => (
                          <DraggableField key={f.id} field={f} onStop={(e, data) => {
@@ -544,7 +544,7 @@ export default function CertificateManagementPanel({
         <div ref={pdfPrintRef} style={{ position: "relative", width: "100%", height: "100%" }}>
           {selectedTemplate && (
             <>
-              <img src={selectedTemplate.image_url} style={{ width: "100%", height: "100%", objectFit: "fill", display: "block" }} crossOrigin="anonymous" />
+              <img src={selectedTemplate.image_url} style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }} crossOrigin="anonymous" />
               <div id="text-overlay" style={{ position: "absolute", inset: 0 }} />
             </>
           )}
