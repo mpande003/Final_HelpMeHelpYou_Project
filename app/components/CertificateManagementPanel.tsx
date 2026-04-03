@@ -377,7 +377,7 @@ export default function CertificateManagementPanel({
                     <div className="absolute inset-0">
                       {fields.map(f => (
                         <DraggableField key={f.id} field={f} onStop={(e, data) => {
-                          const container = (e.currentTarget as HTMLElement).closest(".absolute.inset-0") as HTMLElement;
+                          const container = (data.node as HTMLElement).closest(".absolute.inset-0") as HTMLElement;
                           if (!container) return;
                           const nx = Math.round((f.x * container.clientWidth / 100 + data.x) / container.clientWidth * 100);
                           const ny = Math.round((f.y * container.clientHeight / 100 + data.y) / container.clientHeight * 100);
@@ -455,7 +455,7 @@ export default function CertificateManagementPanel({
                    <div className="absolute inset-0">
                       {fields.map(f => (
                          <DraggableField key={f.id} field={f} onStop={(e, data) => {
-                            const c = (e.currentTarget as HTMLElement).closest(".absolute.inset-0") as HTMLElement;
+                            const c = (data.node as HTMLElement).closest(".absolute.inset-0") as HTMLElement;
                             if (!c) return;
                             const nx = Math.round((f.x * c.clientWidth / 100 + data.x) / c.clientWidth * 100);
                             const ny = Math.round((f.y * c.clientHeight / 100 + data.y) / c.clientHeight * 100);
@@ -466,7 +466,7 @@ export default function CertificateManagementPanel({
                       ))}
                       {signatures.map(s => (
                         <DraggableField key={s.id} field={{...fields[0], id: s.id, x: s.x, y:s.y, fontSize: 0, fontColor: '', fontFace: '', type: 'custom', value: ''}} onStop={(e, data) => {
-                           const c = (e.currentTarget as HTMLElement).closest(".absolute.inset-0") as HTMLElement;
+                           const c = (data.node as HTMLElement).closest(".absolute.inset-0") as HTMLElement;
                            if (!c) return;
                            const nx = Math.round((s.x * c.clientWidth / 100 + data.x) / c.clientWidth * 100);
                            const ny = Math.round((s.y * c.clientHeight / 100 + data.y) / c.clientHeight * 100);
