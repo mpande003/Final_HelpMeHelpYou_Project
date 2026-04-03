@@ -248,7 +248,7 @@ export default function CertificateManagementPanel({
     const target = specific || getFilteredPeople().filter(p => selectedPeopleIds.size === 0 || selectedPeopleIds.has(p.id));
     if (target.length === 0) { setIsGenerating(false); return alert("Select recipients"); }
 
-    const pdf = new jsPDF("landscape", "px", "a4");
+    const pdf = new jsPDF("landscape", "mm", "a4");
     const container = pdfPrintRef.current;
     
     for (let i = 0; i < target.length; i++) {
@@ -384,7 +384,7 @@ export default function CertificateManagementPanel({
               <div className="relative aspect-[1.414/1] bg-[#fffdf3] border-4 border-dashed border-[#e0c4ba] rounded-xl overflow-hidden shadow-inner flex items-center justify-center">
                 {newTemplateImagePreview ? (
                   <>
-                    <img src={newTemplateImagePreview} className="w-full h-full object-contain" alt="Preview" />
+                    <img src={newTemplateImagePreview} className="w-full h-full object-fill" alt="Preview" />
                     <div className="absolute inset-0">
                       {fields.map(f => (
                         <DraggableField key={f.id} field={f} onStop={(e, data) => {
@@ -472,7 +472,7 @@ export default function CertificateManagementPanel({
             {selectedTemplate ? (
               <>
                 <div className="relative w-full border rounded-2xl bg-white overflow-hidden shadow-2xl ring-1 ring-black/5 aspect-[1.414/1]">
-                   <img src={selectedTemplate.image_url} className="w-full h-full object-contain" alt="Preview" />
+                   <img src={selectedTemplate.image_url} className="w-full h-full object-fill" alt="Preview" />
                    <div className="absolute inset-0">
                       {fields.map(f => (
                          <DraggableField key={f.id} field={f} onStop={(e, data) => {
@@ -533,12 +533,12 @@ export default function CertificateManagementPanel({
         </div>
       )}
 
-      {/* Hidden high-res container */}
-      <div style={{ position: "fixed", top: "-9999px", left: 0, width: "1122px", backgroundColor: "#fff" }}>
-        <div ref={pdfPrintRef} style={{ position: "relative", width: "100%" }}>
+      {/* Hidden high-res container (Strict A4 Aspect Ratio 1123x794 at 96dpi) */}
+      <div style={{ position: "fixed", top: "-9999px", left: 0, width: "1123px", height: "794px", backgroundColor: "#fff" }}>
+        <div ref={pdfPrintRef} style={{ position: "relative", width: "100%", height: "100%" }}>
           {selectedTemplate && (
             <>
-              <img src={selectedTemplate.image_url} style={{ width: "100%", display: "block" }} crossOrigin="anonymous" />
+              <img src={selectedTemplate.image_url} style={{ width: "100%", height: "100%", objectFit: "fill", display: "block" }} crossOrigin="anonymous" />
               <div id="text-overlay" style={{ position: "absolute", inset: 0 }} />
             </>
           )}
